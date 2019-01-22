@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ShowBlocks</string>
+    <string name="api_url">https://bicon.net.solidwallet.io/api/v3</string>
+    <string name="json_rpc">2.0</string>
+    <string name="method_get_last">icx_getLastBlock</string>
+    <string name="method_get_by_hash">icx_getBlockByHash</string>
 </resources>
