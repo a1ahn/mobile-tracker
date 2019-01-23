@@ -11,11 +11,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.showblocks.Event.FetchedBlockEvent;
 import com.example.showblocks.Global.MySingleton;
+import com.example.showblocks.Model.RequestGetBlockByHash;
 import com.example.showblocks.Model.RequestGetLastBlock;
 import com.example.showblocks.Model.Result;
 import com.example.showblocks.databinding.ActivityMainBinding;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +28,7 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private static final String TAG = MainActivity.class.getName();
-    private Result[] blocks = new Result[10];
+    private static Result[] blocks = new Result[10];
     private static SuccessListener successListener;
     private static FailListener failListener;
 
@@ -33,21 +38,15 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(binding.toolbar);
 
-        RequestGetLastBlock requestGetLastBlock = new RequestGetLastBlock(
-                getResources().getString(R.string.json_rpc),
-                getResources().getString(R.string.method_get_last),
-                "0"
-        );
         successListener = new SuccessListener();
         failListener = new FailListener();
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                getResources().getString(R.string.api_url),
-                requestGetLastBlock.toJSON(),
-                successListener,
-                failListener
-        );
-        MySingleton.getInstance(this).addToRequestQueue(request);
+        getLastBlock();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -64,6 +63,50 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    void getLastBlock() {
+        RequestGetLastBlock requestGetLastBlock = new RequestGetLastBlock(
+                getResources().getString(R.string.json_rpc),
+                getResources().getString(R.string.method_get_last),
+                "0"
+        );
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                getResources().getString(R.string.api_url),
+                requestGetLastBlock.toJSON(),
+                successListener,
+                failListener
+        );
+        request.setTag("0");
+        MySingleton.getInstance(this).addToRequestQueue(request);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFetchedBlockEvent(FetchedBlockEvent event) {
+        int previousId = Integer.parseInt(event.getId());
+        if (previousId < 9) {
+            getBlockByHash(previousId + 1);
+        }
+        Log.d(TAG, "event Bus deliver : " + event.getId());
+    }
+
+    void getBlockByHash(int id) {
+        RequestGetBlockByHash requestGetBlockByHash = new RequestGetBlockByHash(
+                getResources().getString(R.string.json_rpc),
+                getResources().getString(R.string.method_get_by_hash),
+                String.valueOf(id),
+                "0x" + blocks[id - 1].getPrevBlockHash()
+        );
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                getResources().getString(R.string.api_url),
+                requestGetBlockByHash.toJSON(),
+                successListener,
+                failListener
+        );
+        request.setTag(String.valueOf(id));
+        MySingleton.getInstance(this).addToRequestQueue(request);
+    }
+
     class SuccessListener implements Response.Listener<JSONObject> {
         @Override
         public void onResponse(JSONObject response) {
@@ -71,10 +114,13 @@ public class MainActivity extends AppCompatActivity {
                 int id = Integer.parseInt(response.get("id").toString());
                 JSONObject result = (JSONObject) response.get("result");
                 blocks[id] = parseJSONResultToPOJO(result);
+
+                for (int i = 0; i <= id; i++) {
+                    Log.d(TAG, i + " : " + blocks[i].toString());
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Log.d(TAG, blocks[0].toString());
         }
 
         public Result parseJSONResultToPOJO(JSONObject o) {
@@ -103,5 +149,11 @@ public class MainActivity extends AppCompatActivity {
         public void onErrorResponse(VolleyError error) {
             Log.d(TAG, error.toString());
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
