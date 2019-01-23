@@ -3,9 +3,12 @@ package com.example.showblocks;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,18 +28,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private static final String TAG = MainActivity.class.getName();
     private static Result[] blocks = new Result[10];
     private static SuccessListener successListener;
     private static FailListener failListener;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(binding.toolbar);
+
+        binding.currentTime.setVisibility(View.INVISIBLE);
+        binding.recyclerView.setVisibility(View.INVISIBLE);
+        binding.relativeLayout.getLayoutParams().height = RecyclerView.LayoutParams.MATCH_PARENT;
+        binding.spinner.setVisibility(View.VISIBLE);
+
+        layoutManager = new LinearLayoutManager(this);
+        binding.recyclerView.setLayoutManager(layoutManager);
 
         successListener = new SuccessListener();
         failListener = new FailListener();
@@ -85,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
         int previousId = Integer.parseInt(event.getId());
         if (previousId < 9) {
             getBlockByHash(previousId + 1);
+        } else {
+            Date today = Calendar.getInstance().getTime();
+            binding.currentTime.setText("fetch 시점 : " + DateFormat.getDateTimeInstance().format(today));
+            binding.currentTime.setVisibility(View.VISIBLE);
+            binding.recyclerView.setVisibility(View.VISIBLE);
+            binding.relativeLayout.getLayoutParams().height = RecyclerView.LayoutParams.WRAP_CONTENT;
+            binding.spinner.setVisibility(View.INVISIBLE);
         }
         Log.d(TAG, "event Bus deliver : " + event.getId());
     }
