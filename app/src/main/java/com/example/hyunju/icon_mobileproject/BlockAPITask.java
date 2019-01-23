@@ -3,7 +3,6 @@ package com.example.hyunju.icon_mobileproject;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,14 +17,14 @@ import java.net.URL;
  * Created by hyunju on 2019-01-23.
  */
 
-public class OpenWeatherAPITask extends AsyncTask<Void, Void, Void> {
+public class BlockAPITask extends AsyncTask<Void, Void, BlockInfo> {
+    BlockInfo blockInfo = new BlockInfo();
     @Override
-    public  Void doInBackground(Void... params) {
+    public BlockInfo doInBackground(Void... params) {
 
         try {
             HttpURLConnection conn;
             final String openWeatherURL = "https://bicon.net.solidwallet.io/api/v3";
-            // OutputStream os = null;
             InputStream is = null;
             ByteArrayOutputStream baos = null;
             URL url = null;
@@ -33,13 +32,8 @@ public class OpenWeatherAPITask extends AsyncTask<Void, Void, Void> {
 
             url = new URL(openWeatherURL);
             conn = (HttpURLConnection) url.openConnection();
-
-            //conn.setConnectTimeout(100000);
-            //conn.setReadTimeout(100000);
             conn.setRequestMethod("POST");
-            //conn.setRequestProperty("Cache-Control", "no-cache");
             conn.setRequestProperty("Content-Type", "application/json");
-            //conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
             conn.setDoInput(true);
 
@@ -81,24 +75,14 @@ public class OpenWeatherAPITask extends AsyncTask<Void, Void, Void> {
             JSONObject responseJSON = new JSONObject(response);
             Log.i("DATA response = ", response);
 
-            JSONArray resultArray = responseJSON.getJSONArray("result");
+            JSONObject resultArray = responseJSON.getJSONObject("result");
 
-
-            for (int i = 0; i < resultArray.length(); i++) {
-                JSONObject obj = resultArray.getJSONObject(i);
-                String prev_block_hash =  obj.getString("prev_block_hash");
-                //String prev_block_hash = (String) responseJSON.get("prev_block_hash");
-                Log.i("PREV DATA response = ", prev_block_hash);
-                JSONObject obj2 = resultArray.getJSONObject(i);
-                String block_hash =  obj2.getString("block_hash");
-                //String block_hash = (String) responseJSON.get("block_hash");
-                Log.i("BLOCK  DATA response = ", block_hash);
-            }
-
-
-            //
-            // String job1 = (String) responseJSON.get("job");
-
+            String prev_block_hash = resultArray.getString("prev_block_hash");
+            blockInfo.setPrevBlockHash(prev_block_hash);
+            Log.i("PREV DATA response = ", prev_block_hash);
+            String block_hash = resultArray.getString("block_hash");
+            blockInfo.setCurBlockHash(block_hash);
+            Log.i("BLOCK  DATA response = ", block_hash);
 
 
         } catch (JSONException e) {
@@ -108,7 +92,8 @@ public class OpenWeatherAPITask extends AsyncTask<Void, Void, Void> {
             Log.i("IOEXCEPTION", "JSON오류");
             e.printStackTrace();
         }
-        return null;
+        Log.i("blockInfo###",blockInfo.getCurBlockHash());
+        return blockInfo;
     }
 }
 

@@ -2,32 +2,36 @@ package com.example.hyunju.icon_mobileproject;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    TextView tv ;
+    ListView listview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        OpenWeatherAPITask t = new OpenWeatherAPITask();
-       t.execute();
-}}
+        tv=(TextView)findViewById(R.id.textView1);
+        listview = (ListView)findViewById(R.id.listView1);
+        BlockAPITask t = new BlockAPITask();
+        try {
+            BlockInfo b= t.execute().get();
+            tv.setText(b.getCurBlockHash());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+}
 
 
 //
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        // 날씨를 읽어오는 API 호출
 //
-//        OpenWeatherAPITask t = new OpenWeatherAPITask();
+//        BlockAPITask t = new BlockAPITask();
 //        try {
 //            //Weather w = t.execute(lon, lat).get();
 //            Weather w = t.execute().get();
