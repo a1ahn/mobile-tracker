@@ -54,7 +54,12 @@ public class MainActivity extends AppCompatActivity {
 
         blockList = new ObservableArrayList<>();
         binding.setBlockList(blockList);
-        adapter = new RecyclerViewAdapter();
+        adapter = new RecyclerViewAdapter(new RecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(int index) {
+                Log.d(TAG, "clicked " + index);
+            }
+        });
         binding.recyclerView.setAdapter(adapter);
 
         successListener = new SuccessListener();
