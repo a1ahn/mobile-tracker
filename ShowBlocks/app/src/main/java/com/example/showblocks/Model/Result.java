@@ -1,4 +1,4 @@
-package com.example.showblocks.Model;
+package com.example.showblocks.model;
 
 import org.json.JSONArray;
 
