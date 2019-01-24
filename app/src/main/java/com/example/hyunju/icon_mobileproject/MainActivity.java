@@ -19,17 +19,15 @@ public class MainActivity extends AppCompatActivity {
 
     TextView tv ;
     ListView listview;
-
+    ArrayList arr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //tv=(TextView)findViewById(R.id.textView1);
         listview = (ListView)findViewById(R.id.listView1);
         BlockAPITask t = new BlockAPITask();
         try {
-            ArrayList arr= t.execute().get();
-            //tv.setText(b.getCurBlockHash());
+           arr= t.execute().get();
             ArrayAdapter<String> itemsAdapter =
                     new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arr);
 
@@ -40,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position,
                                         long id) {
                     Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                    String message = "abc";
-                    intent.putExtra(EXTRA_MESSAGE, message);
+
+                    intent.putExtra("block_hash", (String) arr.get(position));
                     startActivity(intent);
                 }
             });

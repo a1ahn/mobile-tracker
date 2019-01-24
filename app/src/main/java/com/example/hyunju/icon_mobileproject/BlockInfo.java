@@ -18,6 +18,8 @@ public class BlockInfo {
     String nonce;
     String signature;
     String txHash;
+    String dataType;
+    String data;
 
     public String getCurBlockHash() {
         return curBlockHash;
@@ -131,8 +133,6 @@ public class BlockInfo {
         this.data = data;
     }
 
-    String dataType;
-    String data;
 
 
 }
