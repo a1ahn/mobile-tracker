@@ -27,7 +27,13 @@
 -  ICON JSON RPC 3.0을 이용하여 가장 마지막 10개의 블록을 가져오기 
 -  내림차순으로 리스트 출력 
 -  각 항목을 표시할 때 block_hash를 title로 사용
+-  각 항목 선택 시 Transaction List 보여주기 
 
+
+## 실행 화면 
+
+ ![MainActivity](./images/mobile-tracker1.PNG)
+ ![Main2Activity](./images/mobile-tracker2.PNG)
 
 ## References
 
