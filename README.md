@@ -23,10 +23,10 @@
 
 ## 수행 완료
 
-- 1. AsyncTask, HttpURLConnection을 활용한 통신
-- 2. ICON JSON RPC 3.0을 이용하여 가장 마지막 10개의 블록을 가져오기 
-- 3. 내림차순으로 리스트 출력 
-- 4. 각 항목을 표시할 때 block_hash를 title로 사용
+-  AsyncTask, HttpURLConnection을 활용한 통신
+-  ICON JSON RPC 3.0을 이용하여 가장 마지막 10개의 블록을 가져오기 
+-  내림차순으로 리스트 출력 
+-  각 항목을 표시할 때 block_hash를 title로 사용
 
 
 ## References
