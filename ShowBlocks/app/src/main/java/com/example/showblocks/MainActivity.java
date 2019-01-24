@@ -36,7 +36,6 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private static final String TAG = MainActivity.class.getName();
-    private static Result[] blocks = new Result[10];
     private static SuccessListener successListener;
     private static FailListener failListener;
     private RecyclerViewAdapter adapter;
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 getResources().getString(R.string.json_rpc),
                 getResources().getString(R.string.method_get_by_hash),
                 String.valueOf(id),
-                "0x" + blocks[id - 1].getPrevBlockHash()
+                "0x" + blockList.get(id - 1).getPrevBlockHash()
         );
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
@@ -140,11 +139,10 @@ public class MainActivity extends AppCompatActivity {
             try {
                 int id = Integer.parseInt(response.get("id").toString());
                 JSONObject result = (JSONObject) response.get("result");
-                blocks[id] = parseJSONResultToPOJO(result);
                 blockList.add(parseJSONResultToPOJO(result));
 
                 for (int i = 0; i <= id; i++) {
-                    Log.d(TAG, i + " : " + blocks[i].toString());
+                    Log.d(TAG, i + " : " + blockList.get(i).toString());
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
