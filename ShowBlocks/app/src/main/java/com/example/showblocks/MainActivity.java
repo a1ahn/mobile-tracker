@@ -1,9 +1,9 @@
 package com.example.showblocks;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -16,9 +16,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.showblocks.Event.FetchedBlockEvent;
 import com.example.showblocks.Global.MySingleton;
-import com.example.showblocks.Model.RequestGetBlockByHash;
-import com.example.showblocks.Model.RequestGetLastBlock;
-import com.example.showblocks.Model.Result;
+import com.example.showblocks.model.RequestGetBlockByHash;
+import com.example.showblocks.model.RequestGetLastBlock;
+import com.example.showblocks.model.Result;
+import com.example.showblocks.Utils.RecyclerViewAdapter;
 import com.example.showblocks.databinding.ActivityMainBinding;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private static Result[] blocks = new Result[10];
     private static SuccessListener successListener;
     private static FailListener failListener;
-    private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter adapter;
+    private RecyclerViewAdapter adapter;
+    private ObservableArrayList<Result> blockList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
         binding.relativeLayout.getLayoutParams().height = RecyclerView.LayoutParams.MATCH_PARENT;
         binding.spinner.setVisibility(View.VISIBLE);
 
-        layoutManager = new LinearLayoutManager(this);
-        binding.recyclerView.setLayoutManager(layoutManager);
+        blockList = new ObservableArrayList<>();
+        binding.setBlockList(blockList);
+        adapter = new RecyclerViewAdapter();
+        binding.recyclerView.setAdapter(adapter);
 
         successListener = new SuccessListener();
         failListener = new FailListener();
@@ -105,12 +108,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Date today = Calendar.getInstance().getTime();
             binding.currentTime.setText("fetch 시점 : " + DateFormat.getDateTimeInstance().format(today));
+            adapter.notifyDataSetChanged();
             binding.currentTime.setVisibility(View.VISIBLE);
             binding.recyclerView.setVisibility(View.VISIBLE);
             binding.relativeLayout.getLayoutParams().height = RecyclerView.LayoutParams.WRAP_CONTENT;
             binding.spinner.setVisibility(View.INVISIBLE);
         }
-        Log.d(TAG, "event Bus deliver : " + event.getId());
     }
 
     void getBlockByHash(int id) {
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = Integer.parseInt(response.get("id").toString());
                 JSONObject result = (JSONObject) response.get("result");
                 blocks[id] = parseJSONResultToPOJO(result);
+                blockList.add(parseJSONResultToPOJO(result));
 
                 for (int i = 0; i <= id; i++) {
                     Log.d(TAG, i + " : " + blocks[i].toString());
