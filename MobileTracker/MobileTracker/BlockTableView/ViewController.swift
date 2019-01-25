@@ -20,8 +20,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view, typically from a nib.
-        dataTask(url: "https://test-ctz.solidwallet.io/api/v3", method: "icx_getLastBlock", params: nil)
+        // Do any additional setup after loading the view, typivarly from a nib.
+        dataTask(url: "https://ctz.solidwallet.io/api/v3", method: "icx_getLastBlock", params: nil)
 
     }
     
@@ -68,8 +68,7 @@ class ViewController: UIViewController {
                 }
 
             } else{
-                print("errrrrr \(error)")
-                print("response \(response)")
+                print("ERROR!! \(String(describing: response))")
             }
         }
         task.resume()
@@ -88,15 +87,38 @@ extension ViewController: UITableViewDataSource {
         }
         return cell
     }
+    
 }
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("눌렀다")
+        
+        self.performSegue(withIdentifier: "goDetailView", sender: blockList[indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
         
     }
-    
+
+//    }
+
+//    // 셀 높이 설정
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        if indexPath.section == 0 {
+//            return 150
+//        } else {
+//            return UITableView.automaticDimension
+//        }
+//    }
+}
+
+extension ViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "goDetailView") {
+            let vc = segue.destination as! DetailViewController
+            vc.blockInfo = sender as? BlockStruct
+        }
+        
+    }
 }
 
 

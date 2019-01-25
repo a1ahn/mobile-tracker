@@ -26,7 +26,7 @@ struct BlockStruct: Codable {
         var version: String
         var prevBlockHash: String
         var merkleTreeRootHash: String
-        var timeStamp: UInt64
+        var timeStamp: Double
         var confirmedTransactionList: [TransactionInfo]
         var blockHash: String
         var height: Int
