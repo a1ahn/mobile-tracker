@@ -1,5 +1,6 @@
 package com.example.showblocks;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +58,17 @@ public class MainActivity extends AppCompatActivity {
         adapter = new RecyclerViewAdapter(new RecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onItemClick(int index) {
-                Log.d(TAG, "clicked " + index);
+                Intent intent = new Intent(getApplicationContext(), DetailBlockActivity.class);
+                try {
+                    JSONArray transactionList = blockList.get(index).getConfirmedTransactionList();
+                    intent.putExtra("listSize", transactionList.length());
+                    for (int i = 0; i < transactionList.length(); i++) {
+                        intent.putExtra("result" + i, transactionList.getJSONObject(i).toString());
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                startActivity(intent);
             }
         });
         binding.recyclerView.setAdapter(adapter);
