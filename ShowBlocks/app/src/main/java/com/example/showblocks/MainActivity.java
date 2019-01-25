@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -47,13 +48,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(binding.toolbar);
+        viewInit();
 
-        binding.currentTime.setVisibility(View.INVISIBLE);
-        binding.recyclerView.setVisibility(View.INVISIBLE);
-        binding.relativeLayout.getLayoutParams().height = RecyclerView.LayoutParams.MATCH_PARENT;
-        binding.spinner.setVisibility(View.VISIBLE);
-
-        blockList = new ObservableArrayList<>();
         binding.setBlockList(blockList);
         adapter = new RecyclerViewAdapter(new RecyclerViewAdapter.ItemClickListener() {
             @Override
@@ -78,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
         getLastBlock();
     }
 
+    void viewInit() {
+        binding.currentTime.setVisibility(View.INVISIBLE);
+        binding.recyclerView.setVisibility(View.INVISIBLE);
+        binding.relativeLayout.getLayoutParams().height = RecyclerView.LayoutParams.MATCH_PARENT;
+        binding.spinner.setVisibility(View.VISIBLE);
+
+        blockList = new ObservableArrayList<>();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -93,7 +98,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_reload) {
-            Log.d(TAG, "selected");
+            Toast.makeText(this, "Fetching latest 10 blocks...", Toast.LENGTH_SHORT).show();
+            viewInit();
+            getLastBlock();
         }
         return super.onOptionsItemSelected(item);
     }
