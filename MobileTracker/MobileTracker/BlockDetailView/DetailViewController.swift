@@ -25,6 +25,17 @@ class DetailViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    public func timeStampToDate(timestamp: Double) -> String {
+        let date = Date(timeIntervalSince1970: timestamp)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let result = dateFormatter.string(from: date)
+        return result
+        
+    }
+    
 
     /*
     // MARK: - Navigation
@@ -54,20 +65,11 @@ extension DetailViewController: UITableViewDataSource {
             let blockCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             if let cell = blockCell as? BlockTableViewCell, let block = blockInfo {
                 let result = block.result
-//                cell.heightLabel.sizeToFit()
+
                 cell.heightLabel.text = String(result.height)
-                
-                
-                let timestamp = result.timeStamp / 1000000.0
-            
-                let date = Date(timeIntervalSince1970: timestamp)
-                
-                let dateFormatter = DateFormatter()
-                dateFormatter.locale = NSLocale.current
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                let strDate = dateFormatter.string(from: date)
-                
-                cell.timeStampLabel.text = strDate
+
+                let date = timeStampToDate(timestamp: result.timeStamp / 1000000.0)
+                cell.timeStampLabel.text = date
                 cell.hashLabel.text = result.blockHash
                 cell.prevHashLabel.text = result.prevBlockHash
             }
@@ -77,7 +79,7 @@ extension DetailViewController: UITableViewDataSource {
             let transactionCell = tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath)
             if let cell = transactionCell as? TransactionTableViewCell, let block = blockInfo {
                 let transactionInfo = block.result.confirmedTransactionList[indexPath.row]
-
+                
                 cell.txHashLabel.text = transactionInfo.txHash
                 cell.fromLabel.text = transactionInfo.from
                 cell.toLabel.text = transactionInfo.to
