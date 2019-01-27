@@ -11,7 +11,9 @@ import UIKit
 class ViewControllerTableViewCell: UITableViewCell {
     
     @IBOutlet weak var blockHashLabel: UILabel!
-    
+    @IBOutlet weak var blockHeightLabel: UILabel!
+    @IBOutlet weak var timestampLabel: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

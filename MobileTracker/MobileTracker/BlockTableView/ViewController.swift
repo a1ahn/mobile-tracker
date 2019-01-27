@@ -8,107 +8,84 @@
 
 import Foundation
 import UIKit
-
+import Network
 class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    private var blockList = [BlockStruct]()
-    private var lastBlockHeight: Int = 0
-    
+    public static var blockList = [BlockStruct]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Do any additional setup after loading the view, typivarly from a nib.
-        dataTask(url: "https://ctz.solidwallet.io/api/v3", method: "icx_getLastBlock", params: nil)
+        self.navigationItem.title = "ICON Tracker"
 
+        let network = Network()
+        
+        let req = Requests(method: .getLastBlock, params: nil)
+        network.sendRequest(req: req)
+        
+        for _ in 1...9 {
+            let a = Requests(method: .getBlockByHeight, params: ["height": "0x" + String(Network._lastHeight-1, radix: 16)])
+            network.sendRequest(req: a)
+        }
+
+        ViewController.blockList.sort { $0.result.height < $1.result.height }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableData), name: .reload, object: nil)
     }
     
-    
-    func dataTask(url: String, method: String, params: [String: Any]?) {
-        print("데이터 받는다!!")
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = "POST"
-        
-        var req = ["jsonrpc": "2.0", "method": method, "id": Int(arc4random_uniform(9999))] as [String: Any]
-        
-        if let param = params {
-            req["params"] = param
-        }
-        
-        do {
-            let data = try JSONSerialization.data(withJSONObject: req, options: [])
-            request.httpBody = data
-        } catch {
-            print("리턴 \(request)")
-        }
-        if request.value(forHTTPHeaderField: "Content-Type") == nil {
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        }
-        
-        
-        let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            
-            let json = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
-            print(json)
-            
-            if let data = data, let blockInfo = try? decoder.decode(BlockStruct.self, from: data) {
-                self.blockList.append(blockInfo)
-
-                print("성공")
-                print(blockInfo)
-                print("블락 몇개? \(self.blockList.count)")
-                self.lastBlockHeight = blockInfo.result.height
-
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-
-            } else{
-                print("ERROR!! \(String(describing: response))")
-            }
-        }
-        task.resume()
+    @objc func reloadTableData(notification: NSNotification) {
+        self.tableView.reloadData()
     }
 }
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return blockList.count
+        return ViewController.blockList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        
         if let blockCell = cell as? ViewControllerTableViewCell {
-            blockCell.blockHashLabel.text = blockList[indexPath.row].result.blockHash
+            
+            let info = ViewController.blockList[indexPath.row].result
+            blockCell.blockHashLabel.text = info.blockHash
+            let date = timeStampToDate(timestamp: info.timeStamp / 1000000.0)
+            blockCell.timestampLabel.text = date
+            blockCell.blockHeightLabel.text = String(info.height)
         }
         return cell
     }
     
+//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//
+//        cell.alpha = 0
+//
+//        UIView.animate(
+//            withDuration: 0.5,
+//            delay: 0.05 * Double(indexPath.row),
+//            animations: {
+//                cell.alpha = 1
+//        })
+//    }
 }
 
 extension ViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("눌렀다")
-        
-        self.performSegue(withIdentifier: "goDetailView", sender: blockList[indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
-        
+        self.performSegue(withIdentifier: "goDetailView", sender: ViewController.blockList[indexPath.row])
     }
 
-//    }
-
-//    // 셀 높이 설정
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        if indexPath.section == 0 {
-//            return 150
-//        } else {
-//            return UITableView.automaticDimension
-//        }
-//    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 115
+        } else {
+            return UITableView.automaticDimension
+        }
+    }
 }
 
 extension ViewController {
@@ -117,9 +94,16 @@ extension ViewController {
             let vc = segue.destination as! DetailViewController
             vc.blockInfo = sender as? BlockStruct
         }
+    }
+    
+    public func timeStampToDate(timestamp: Double) -> String {
+        let date = Date(timeIntervalSince1970: timestamp)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let result = dateFormatter.string(from: date)
+        return result
         
     }
 }
-
-
-

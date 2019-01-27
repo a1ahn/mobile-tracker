@@ -13,13 +13,13 @@
 		1B47FF6321F6052F000763B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B47FF6221F6052F000763B7 /* Assets.xcassets */; };
 		1B47FF6621F6052F000763B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B47FF6421F6052F000763B7 /* LaunchScreen.storyboard */; };
 		1B6A1CA721FA4F5100FF66B3 /* ViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6A1CA621FA4F5100FF66B3 /* ViewControllerTableViewCell.swift */; };
-		1B739C4B21F8FA2600A3FAF7 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B739C4A21F8FA2600A3FAF7 /* Request.swift */; };
 		1BC563D521F79AA500843DEE /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC563D421F79AA500843DEE /* Response.swift */; };
 		1BD5382021FB091E00ABDC50 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5381F21FB091E00ABDC50 /* API.swift */; };
 		1BD5382321FB0CD000ABDC50 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5382221FB0CD000ABDC50 /* Network.swift */; };
 		1BD5382621FB4DCC00ABDC50 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5382521FB4DCC00ABDC50 /* DetailViewController.swift */; };
 		1BD5382821FB7E2300ABDC50 /* BlockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5382721FB7E2300ABDC50 /* BlockTableViewCell.swift */; };
 		1BD5382A21FB7E3000ABDC50 /* TransactionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5382921FB7E3000ABDC50 /* TransactionTableViewCell.swift */; };
+		1BD5383021FBBB2700ABDC50 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5382F21FBBB2700ABDC50 /* Request.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,13 +31,13 @@
 		1B47FF6521F6052F000763B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1B47FF6721F6052F000763B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1B6A1CA621FA4F5100FF66B3 /* ViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTableViewCell.swift; sourceTree = "<group>"; };
-		1B739C4A21F8FA2600A3FAF7 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		1BC563D421F79AA500843DEE /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		1BD5381F21FB091E00ABDC50 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		1BD5382221FB0CD000ABDC50 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		1BD5382521FB4DCC00ABDC50 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		1BD5382721FB7E2300ABDC50 /* BlockTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTableViewCell.swift; sourceTree = "<group>"; };
 		1BD5382921FB7E3000ABDC50 /* TransactionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTableViewCell.swift; sourceTree = "<group>"; };
+		1BD5382F21FBBB2700ABDC50 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +77,6 @@
 				1B6A1CA321FA4EAE00FF66B3 /* Model */,
 				1B6A1CA121FA43FF00FF66B3 /* Network */,
 				1B47FF5F21F6052E000763B7 /* Main.storyboard */,
-				1B739C4A21F8FA2600A3FAF7 /* Request.swift */,
 				1B47FF6721F6052F000763B7 /* Info.plist */,
 			);
 			path = MobileTracker;
@@ -88,6 +87,7 @@
 			children = (
 				1BD5381F21FB091E00ABDC50 /* API.swift */,
 				1BD5382221FB0CD000ABDC50 /* Network.swift */,
+				1BD5382F21FBBB2700ABDC50 /* Request.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -211,10 +211,10 @@
 				1BD5382321FB0CD000ABDC50 /* Network.swift in Sources */,
 				1B47FF5E21F6052E000763B7 /* ViewController.swift in Sources */,
 				1B6A1CA721FA4F5100FF66B3 /* ViewControllerTableViewCell.swift in Sources */,
-				1B739C4B21F8FA2600A3FAF7 /* Request.swift in Sources */,
 				1BC563D521F79AA500843DEE /* Response.swift in Sources */,
 				1BD5382A21FB7E3000ABDC50 /* TransactionTableViewCell.swift in Sources */,
 				1BD5382021FB091E00ABDC50 /* API.swift in Sources */,
+				1BD5383021FBBB2700ABDC50 /* Request.swift in Sources */,
 				1B47FF5C21F6052E000763B7 /* AppDelegate.swift in Sources */,
 				1BD5382621FB4DCC00ABDC50 /* DetailViewController.swift in Sources */,
 			);
