@@ -85,6 +85,7 @@ extension DetailViewController: UITableViewDataSource {
                 cell.toLabel.text = transactionInfo.to
                 cell.amountLabel.text = transactionInfo.value
                 cell.txFeeLabel.text = transactionInfo.stepLimit
+                cell.methodLabel.text = transactionInfo.data?.method ?? "transfer"
             }
             return transactionCell
         }
@@ -104,7 +105,7 @@ extension DetailViewController: UITableViewDelegate {
         if indexPath.section == 0 {
             return 175
         } else if indexPath.section == 1 {
-            return 175
+            return 193
         } else {
             return UITableView.automaticDimension
         }

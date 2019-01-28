@@ -13,7 +13,8 @@ class ViewControllerTableViewCell: UITableViewCell {
     @IBOutlet weak var blockHashLabel: UILabel!
     @IBOutlet weak var blockHeightLabel: UILabel!
     @IBOutlet weak var timestampLabel: UILabel!
-
+    @IBOutlet weak var methodLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

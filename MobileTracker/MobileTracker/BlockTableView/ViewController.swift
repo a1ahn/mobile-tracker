@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Network
+
 class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -51,10 +52,12 @@ extension ViewController: UITableViewDataSource {
         if let blockCell = cell as? ViewControllerTableViewCell {
             
             let info = ViewController.blockList[indexPath.row].result
-            blockCell.blockHashLabel.text = info.blockHash
+            
             let date = timeStampToDate(timestamp: info.timeStamp / 1000000.0)
-            blockCell.timestampLabel.text = date
+            blockCell.blockHashLabel.text = info.blockHash
             blockCell.blockHeightLabel.text = String(info.height)
+            blockCell.methodLabel.text = info.confirmedTransactionList.first?.data?.method ?? "transfer"
+            blockCell.timestampLabel.text = date
         }
         return cell
     }
