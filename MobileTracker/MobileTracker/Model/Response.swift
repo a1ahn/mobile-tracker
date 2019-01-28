@@ -9,7 +9,15 @@
 import Foundation
 
 struct BlockStruct: Codable {
-    
+    struct paramsInfo: Codable {
+        var roomNo: String?
+        var targetDate: String?
+        var targetTime: String?
+    }
+    struct dataInfo: Codable {
+        var method: String?
+        var params: paramsInfo?
+    }
     struct TransactionInfo: Codable {
         var from: String
         var nid: String
@@ -18,8 +26,12 @@ struct BlockStruct: Codable {
         var timestamp: String
         var to: String
         var txHash: String
-        var value: String
+        var value: String?
         var version: String
+        // canceled
+        var nonce: String?
+        var data: dataInfo?
+        var dataType: String?
     }
     
     struct resultInfo: Codable {
@@ -37,5 +49,4 @@ struct BlockStruct: Codable {
     var jsonrpc: String
     var id: Int
     var result: resultInfo
-
 }
