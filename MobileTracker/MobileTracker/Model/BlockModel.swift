@@ -10,9 +10,21 @@ import Foundation
 
 struct BlockModel: Codable {
     struct paramsInfo: Codable {
-        var roomNo: String?
-        var targetDate: String?
-        var targetTime: String?
+        var date: String?
+        var time: String?
+        var div : String?
+        var value: String?
+        
+        enum CodingKeys: String, CodingKey {
+            case date = "_date"
+            case time = "_time"
+            case div = "_div"
+            case value = "_value"
+        }
+        
+//        var roomNo: String?
+//        var targetDate: String?
+//        var targetTime: String?
     }
     
     struct dataInfo: Codable {

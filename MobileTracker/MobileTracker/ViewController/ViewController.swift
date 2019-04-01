@@ -13,6 +13,10 @@ class ViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var indicator: UIActivityIndicatorView!
     
+    @IBOutlet var pickBarButton: UIBarButtonItem!
+    @IBOutlet var cancelBarButton: UIBarButtonItem!
+    
+    
     
     
     // MARK:- Variables
@@ -31,6 +35,7 @@ class ViewController: UIViewController {
             }
         }
     }
+    var isPick = false
     
     
     
@@ -79,20 +84,72 @@ class ViewController: UIViewController {
                 network.sendRequest(request: req)
             }
             self.refreshFlag = false
-//            self.tableView.reloadData()
         }
     }
     
+    
+    
+    @objc func cancelBarButtonClick() {
+        self.isPick = !self.isPick
+        
+        self.pickBarButton.title = "선택"
+        self.navigationItem.leftBarButtonItem = nil
+        
+        self.tableView.allowsSelection = true // 선택 화면에서 테이블 셀 선택 허용
+        
+        self.tableView.reloadData()
+    }
+    
 
+    
+    // MARK:- Actions
+    @IBAction func checkBoxClick(_ sender: UIButton) {
+        print("selected = \(sender.isSelected)")
+        if sender.isSelected { // 선택 되었다면
+            sender.setBackgroundImage(UIImage(named: "uncheckedBox"), for: .normal)
+            sender.isSelected = false
+        } else { // 선택 안되었을 떄
+            sender.setBackgroundImage(UIImage(named: "checkedBox"), for: .normal)
+            sender.isSelected = true
+            
+            print(sender.tag)
+        }
+    }
+    
+    
+    
+    @IBAction func pickClick(_ sender: Any) {
+        self.isPick = !self.isPick // isPick toggle
+        self.tableView.reloadData()
+        
+        if self.isPick {
+            self.pickBarButton.title = "저장"
+            
+            let leftBarButton = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancelBarButtonClick))
+            self.navigationItem.leftBarButtonItem = leftBarButton
+            
+            self.tableView.allowsSelection = false // 선택 화면에서 테이블 셀 선택 불가
+        } else {
+            self.pickBarButton.title = "선택"
+            self.navigationItem.leftBarButtonItem = nil
+            
+            self.tableView.allowsSelection = true // 선택 화면에서 테이블 셀 선택 허용
+        }
+    }
 }
 
 
 
 extension ViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let blockDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "BlockDetailViewController") as! BlockDetailViewController
+        
+        blockDetailVC.block = ViewController.blockList[indexPath.row]
+        
+        self.navigationController?.pushViewController(blockDetailVC, animated: true)
     }
 }
+
 
 
 extension ViewController: UITableViewDataSource {
@@ -102,8 +159,22 @@ extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "blockCell") as! blockCell
+        let blockResult = ViewController.blockList[indexPath.row].result
         
-        cell.heightLabel.text = String(ViewController.blockList[indexPath.row].result.blockHash)
+        if isPick {
+            cell.checkBoxView.isHidden = false
+            cell.titleConstraint.constant = 61
+            cell.timeConstraint.constant = 61
+        } else {
+            cell.checkBoxView.isHidden = true
+            cell.titleConstraint.constant = 10
+            cell.timeConstraint.constant = 10
+        }
+        
+        let hash = String(blockResult.blockHash)
+        cell.hashLabel.text = hash
+        
+        cell.checkBox.tag = indexPath.row
         
         return cell
     }
@@ -111,6 +182,12 @@ extension ViewController: UITableViewDataSource {
 
 
 class blockCell: UITableViewCell {
-    @IBOutlet var heightLabel: UILabel!
+    @IBOutlet var hashLabel: UILabel!
+    @IBOutlet var checkBox: UIButton!
+    
+    @IBOutlet var titleConstraint: NSLayoutConstraint!
+    @IBOutlet var timeConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var checkBoxView: UIView!
 }
 
