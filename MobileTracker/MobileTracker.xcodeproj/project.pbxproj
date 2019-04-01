@@ -13,6 +13,10 @@
 		60289F39224CC10700F7548D /* MobileTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60289F37224CC10700F7548D /* MobileTracker.xcdatamodeld */; };
 		60289F3B224CC10800F7548D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60289F3A224CC10800F7548D /* Assets.xcassets */; };
 		60289F3E224CC10800F7548D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60289F3C224CC10800F7548D /* LaunchScreen.storyboard */; };
+		60289F4A224DA7F300F7548D /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F49224DA7F300F7548D /* Request.swift */; };
+		60289F4C224DA8F100F7548D /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F4B224DA8F100F7548D /* API.swift */; };
+		60289F4E224DAC3900F7548D /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F4D224DAC3900F7548D /* Network.swift */; };
+		60289F51224DAF6400F7548D /* BlockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F50224DAF6400F7548D /* BlockModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,10 @@
 		60289F3A224CC10800F7548D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		60289F3D224CC10800F7548D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		60289F3F224CC10800F7548D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		60289F49224DA7F300F7548D /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		60289F4B224DA8F100F7548D /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		60289F4D224DAC3900F7548D /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		60289F50224DAF6400F7548D /* BlockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +64,59 @@
 		60289F2F224CC10700F7548D /* MobileTracker */ = {
 			isa = PBXGroup;
 			children = (
-				60289F30224CC10700F7548D /* AppDelegate.swift */,
-				60289F32224CC10700F7548D /* ViewController.swift */,
-				60289F34224CC10700F7548D /* Main.storyboard */,
-				60289F3A224CC10800F7548D /* Assets.xcassets */,
-				60289F3C224CC10800F7548D /* LaunchScreen.storyboard */,
+				60289F45224DA5E500F7548D /* Storyboard */,
+				60289F46224DA5F200F7548D /* ViewController */,
+				60289F47224DA61400F7548D /* Support */,
+				60289F48224DA63B00F7548D /* Network */,
+				60289F4F224DAF4F00F7548D /* Model */,
 				60289F3F224CC10800F7548D /* Info.plist */,
 				60289F37224CC10700F7548D /* MobileTracker.xcdatamodeld */,
 			);
 			path = MobileTracker;
+			sourceTree = "<group>";
+		};
+		60289F45224DA5E500F7548D /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				60289F3C224CC10800F7548D /* LaunchScreen.storyboard */,
+				60289F34224CC10700F7548D /* Main.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		60289F46224DA5F200F7548D /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				60289F32224CC10700F7548D /* ViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		60289F47224DA61400F7548D /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				60289F30224CC10700F7548D /* AppDelegate.swift */,
+				60289F3A224CC10800F7548D /* Assets.xcassets */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		60289F48224DA63B00F7548D /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				60289F49224DA7F300F7548D /* Request.swift */,
+				60289F4B224DA8F100F7548D /* API.swift */,
+				60289F4D224DAC3900F7548D /* Network.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		60289F4F224DAF4F00F7548D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				60289F50224DAF6400F7548D /* BlockModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,8 +191,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				60289F39224CC10700F7548D /* MobileTracker.xcdatamodeld in Sources */,
+				60289F4A224DA7F300F7548D /* Request.swift in Sources */,
+				60289F4E224DAC3900F7548D /* Network.swift in Sources */,
 				60289F33224CC10700F7548D /* ViewController.swift in Sources */,
 				60289F31224CC10700F7548D /* AppDelegate.swift in Sources */,
+				60289F4C224DA8F100F7548D /* API.swift in Sources */,
+				60289F51224DAF6400F7548D /* BlockModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
