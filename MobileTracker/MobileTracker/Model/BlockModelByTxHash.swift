@@ -1,14 +1,14 @@
 //
-//  BlockModel.swift
+//  BlockModelByHash.swift
 //  MobileTracker
 //
-//  Created by Byunsangjin on 29/03/2019.
+//  Created by Byunsangjin on 02/04/2019.
 //  Copyright © 2019 Byunsangjin. All rights reserved.
 //
 
 import Foundation
 
-struct BlockModel: Codable {
+struct BlockModelByTxHash: Codable {
     struct ParamsInfo: Codable {
         var date: String?
         var time: String?
@@ -28,7 +28,7 @@ struct BlockModel: Codable {
         var params: ParamsInfo?
     }
     
-    struct TransactionInfo: Codable {
+    struct ResultInfo: Codable {
         var from: String
         var nid: String
         var signature: String
@@ -44,29 +44,7 @@ struct BlockModel: Codable {
         var dataType: String?
     }
     
-    struct ResultInfo: Codable {
-        var version: String
-        var prevBlockHash: String
-        var merkleTreeRootHash: String
-        var timeStamp: Double
-        var confirmedTransactionList: [TransactionInfo]
-        var blockHash: String
-        var height: Int
-        var peerId: String
-        var signature: String
-        
-        enum CodingKeys: String, CodingKey {
-            case version, height, signature
-            case prevBlockHash = "prev_block_hash"
-            case merkleTreeRootHash = "merkle_tree_root_hash"
-            case timeStamp = "time_stamp"
-            case confirmedTransactionList = "confirmed_transaction_list"
-            case blockHash = "block_hash"
-            case peerId = "peer_id"
-        }
-    }
-    
-    var jsonrpc: String
     var id: Int
+    var jsonrpc: String
     var result: ResultInfo
 }

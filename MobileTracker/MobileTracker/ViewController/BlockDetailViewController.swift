@@ -63,7 +63,12 @@ extension BlockDetailViewController: UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        if indexPath.section == 1 {
+            let txHashDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "TxHashDetailViewController") as! TxHashDetailViewController
+            txHashDetailVC.txHash = self.txHashArray[indexPath.row].txHash
+            
+            self.navigationController?.pushViewController(txHashDetailVC, animated: true)
+        }
     }
 }
 
@@ -88,6 +93,8 @@ extension BlockDetailViewController: UITableViewDataSource {
             
             blockDetailCell.titleLabel.text = self.blockInfoTitle[indexPath.row]
             blockDetailCell.contentLabel.text = self.blockInfoArray[indexPath.row]
+            
+            
             
             return blockDetailCell
             
@@ -120,7 +127,6 @@ extension BlockDetailViewController: UITableViewDataSource {
 class BlockDetailCell: UITableViewCell {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var contentLabel: UILabel!
-    
 }
 
 
