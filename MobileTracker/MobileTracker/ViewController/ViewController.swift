@@ -14,8 +14,6 @@ class ViewController: UIViewController {
     @IBOutlet var indicator: UIActivityIndicatorView!
     
     @IBOutlet var pickBarButton: UIBarButtonItem!
-    @IBOutlet var cancelBarButton: UIBarButtonItem!
-    
     
     
     
