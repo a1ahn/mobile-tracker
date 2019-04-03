@@ -42,7 +42,19 @@ class TxHashDetailViewController: UIViewController {
 
 
 extension TxHashDetailViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let detailPopUpVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailPopUpViewController") as! DetailPopUpViewController
+        
+        self.addChild(detailPopUpVC)
+        self.view.addSubview(detailPopUpVC.view)
+        
+        // 해당 셀의 내용 전달
+        let title = self.txHashInfoTitle[indexPath.row]
+        let content = self.txHashInfoArray[indexPath.row]
+        
+        detailPopUpVC.titleLabel.text = title
+        detailPopUpVC.contentLabel.text = content
+    }
 }
 
 
@@ -60,9 +72,6 @@ extension TxHashDetailViewController: UITableViewDataSource {
         
         return cell
     }
-    
-    
-    
 }
 
 

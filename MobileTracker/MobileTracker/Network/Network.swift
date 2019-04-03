@@ -44,7 +44,7 @@ class Network {
             // 응답 처리 로직
             if let block = try? API.decoder.decode(BlockModel.self, from: data!) {
                 Network.lastHeight = block.result.height
-                ViewController.blockList.append(block)
+                MainViewController.blockList.append(block)
                 print("height = \(block.result.height)")
                 
                 self.semaphore.signal()
@@ -100,5 +100,50 @@ class Network {
         
         task.resume()
         self.semaphore.wait()
+    }
+    
+    
+    func atHeightRequest(request: Request, complition: (()->Void)? = nil) -> BlockModel {
+        var result: BlockModel?
+        
+        var requestURL = URLRequest(url: URL(string: request.path)!)
+        requestURL.httpMethod = "POST"
+        
+        var body = ["jsonrpc": request.jsonrpc, "method": request.method.rawValue, "id": request.id ] as [String : Any]
+        if let params = request.params {
+            body["params"] = params
+        }
+        
+        do {
+            let data = try JSONSerialization.data(withJSONObject: body, options: [])
+            requestURL.httpBody = data
+        } catch {}
+        
+        requestURL.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: requestURL) { (data, response, error) in
+            // 통신이 실패했을 떄
+            if let e = error {
+                print("error = \(e.localizedDescription)")
+                return
+            }
+            
+            // 응답 처리 로직
+            if let block = try? API.decoder.decode(BlockModel.self, from: data!) {
+                result = block
+                self.semaphore.signal()
+                
+            } else {
+                print("error")
+                
+                self.semaphore.signal()
+            }
+        }
+        
+        task.resume()
+        self.semaphore.wait()
+        
+        return result!
     }
 }

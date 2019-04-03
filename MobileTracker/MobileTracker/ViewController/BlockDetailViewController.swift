@@ -66,7 +66,7 @@ extension BlockDetailViewController: UITableViewDelegate {
         if indexPath.section == 1 {
             let txHashDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "TxHashDetailViewController") as! TxHashDetailViewController
             txHashDetailVC.txHash = self.txHashArray[indexPath.row].txHash
-            
+
             self.navigationController?.pushViewController(txHashDetailVC, animated: true)
         }
     }
@@ -94,11 +94,7 @@ extension BlockDetailViewController: UITableViewDataSource {
             blockDetailCell.titleLabel.text = self.blockInfoTitle[indexPath.row]
             blockDetailCell.contentLabel.text = self.blockInfoArray[indexPath.row]
             
-            
-            
             return blockDetailCell
-            
-        
         default: // transactions section
             let transactionCell = tableView.dequeueReusableCell(withIdentifier: "TransactionCell") as! TransactionCell
             
@@ -120,6 +116,21 @@ extension BlockDetailViewController: UITableViewDataSource {
         }
     }
     
+    
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let detailPopUpVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailPopUpViewController") as! DetailPopUpViewController
+        
+        self.addChild(detailPopUpVC)
+        self.view.addSubview(detailPopUpVC.view)
+        
+        // 해당 셀의 내용 전달
+        let title = self.blockInfoTitle[indexPath.row]
+        let content = self.blockInfoArray[indexPath.row]
+        
+        detailPopUpVC.titleLabel.text = title
+        detailPopUpVC.contentLabel.text = content
+    }
 }
 
 
