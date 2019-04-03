@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.98" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Block" representedClassName="BlockMO" syncable="YES" codeGenerationType="class">
+        <attribute name="blockHash" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="height" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="merkleTreeRootHash" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="prevBlockHash" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="transactions" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Transaction" inverseName="blcok" inverseEntity="Transaction" syncable="YES"/>
+    </entity>
+    <entity name="Transaction" representedClassName="TransactionMO" syncable="YES" codeGenerationType="class">
+        <attribute name="blockHash" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="from" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="to" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="txHash" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="blcok" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Block" inverseName="transactions" inverseEntity="Block" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Block" positionX="-447.3125" positionY="-60.41796875" width="128" height="133"/>
+        <element name="Transaction" positionX="-264.40625" positionY="-1.01953125" width="128" height="118"/>
+    </elements>
 </model>

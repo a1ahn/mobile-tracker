@@ -17,5 +17,6 @@ class API {
     enum METHOD: String {
         case getLastBlock = "icx_getLastBlock" // Returns the last block information.
         case getBlockByHeight = "icx_getBlockByHeight" // Returns block information by block height.
+        case getTransactionByHash = "icx_getTransactionByHash"
     }
 }

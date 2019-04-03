@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		60289F31224CC10700F7548D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F30224CC10700F7548D /* AppDelegate.swift */; };
-		60289F33224CC10700F7548D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F32224CC10700F7548D /* ViewController.swift */; };
+		60289F33224CC10700F7548D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F32224CC10700F7548D /* MainViewController.swift */; };
 		60289F36224CC10700F7548D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60289F34224CC10700F7548D /* Main.storyboard */; };
 		60289F39224CC10700F7548D /* MobileTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60289F37224CC10700F7548D /* MobileTracker.xcdatamodeld */; };
 		60289F3B224CC10800F7548D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60289F3A224CC10800F7548D /* Assets.xcassets */; };
@@ -18,13 +18,21 @@
 		60289F4E224DAC3900F7548D /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F4D224DAC3900F7548D /* Network.swift */; };
 		60289F51224DAF6400F7548D /* BlockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F50224DAF6400F7548D /* BlockModel.swift */; };
 		60289F532251CAE700F7548D /* BlockDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F522251CAE700F7548D /* BlockDetailViewController.swift */; };
-		60289F562252128E00F7548D /* DoubleUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F552252128E00F7548D /* DoubleUtils.swift */; };
+		60289F562252128E00F7548D /* Double+date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60289F552252128E00F7548D /* Double+date.swift */; };
+		6074B47422534D8900CDA06E /* TxHashDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6074B47322534D8900CDA06E /* TxHashDetailViewController.swift */; };
+		6074B476225367CF00CDA06E /* BlockModelByTxHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6074B475225367CF00CDA06E /* BlockModelByTxHash.swift */; };
+		6074B4962253837300CDA06E /* DetailPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6074B4952253837300CDA06E /* DetailPopUpViewController.swift */; };
+		6074B49822545F9B00CDA06E /* DatabaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6074B49722545F9B00CDA06E /* DatabaseViewController.swift */; };
+		6074B49A2254735700CDA06E /* Array+remove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6074B4992254735700CDA06E /* Array+remove.swift */; };
+		6074B49D2254944000CDA06E /* DBManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6074B49C2254944000CDA06E /* DBManger.swift */; };
+		6074B49F2254A61500CDA06E /* BlockDBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6074B49E2254A61500CDA06E /* BlockDBModel.swift */; };
+		6074B4A12254A86C00CDA06E /* TransactionDBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6074B4A02254A86C00CDA06E /* TransactionDBModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		60289F2D224CC10700F7548D /* MobileTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60289F30224CC10700F7548D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		60289F32224CC10700F7548D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		60289F32224CC10700F7548D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		60289F35224CC10700F7548D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		60289F38224CC10700F7548D /* MobileTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MobileTracker.xcdatamodel; sourceTree = "<group>"; };
 		60289F3A224CC10800F7548D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -35,7 +43,15 @@
 		60289F4D224DAC3900F7548D /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		60289F50224DAF6400F7548D /* BlockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockModel.swift; sourceTree = "<group>"; };
 		60289F522251CAE700F7548D /* BlockDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockDetailViewController.swift; sourceTree = "<group>"; };
-		60289F552252128E00F7548D /* DoubleUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleUtils.swift; sourceTree = "<group>"; };
+		60289F552252128E00F7548D /* Double+date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+date.swift"; sourceTree = "<group>"; };
+		6074B47322534D8900CDA06E /* TxHashDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxHashDetailViewController.swift; sourceTree = "<group>"; };
+		6074B475225367CF00CDA06E /* BlockModelByTxHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockModelByTxHash.swift; sourceTree = "<group>"; };
+		6074B4952253837300CDA06E /* DetailPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPopUpViewController.swift; sourceTree = "<group>"; };
+		6074B49722545F9B00CDA06E /* DatabaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseViewController.swift; sourceTree = "<group>"; };
+		6074B4992254735700CDA06E /* Array+remove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+remove.swift"; sourceTree = "<group>"; };
+		6074B49C2254944000CDA06E /* DBManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManger.swift; sourceTree = "<group>"; };
+		6074B49E2254A61500CDA06E /* BlockDBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockDBModel.swift; sourceTree = "<group>"; };
+		6074B4A02254A86C00CDA06E /* TransactionDBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDBModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +89,8 @@
 				60289F47224DA61400F7548D /* Support */,
 				60289F48224DA63B00F7548D /* Network */,
 				60289F4F224DAF4F00F7548D /* Model */,
-				60289F542252124800F7548D /* Utils */,
+				6074B49B2254943300CDA06E /* Manager */,
+				60289F542252124800F7548D /* Extension */,
 				60289F3F224CC10800F7548D /* Info.plist */,
 				60289F37224CC10700F7548D /* MobileTracker.xcdatamodeld */,
 			);
@@ -92,8 +109,11 @@
 		60289F46224DA5F200F7548D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				60289F32224CC10700F7548D /* ViewController.swift */,
+				60289F32224CC10700F7548D /* MainViewController.swift */,
 				60289F522251CAE700F7548D /* BlockDetailViewController.swift */,
+				6074B47322534D8900CDA06E /* TxHashDetailViewController.swift */,
+				6074B4952253837300CDA06E /* DetailPopUpViewController.swift */,
+				6074B49722545F9B00CDA06E /* DatabaseViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -121,16 +141,28 @@
 			isa = PBXGroup;
 			children = (
 				60289F50224DAF6400F7548D /* BlockModel.swift */,
+				6074B475225367CF00CDA06E /* BlockModelByTxHash.swift */,
+				6074B49E2254A61500CDA06E /* BlockDBModel.swift */,
+				6074B4A02254A86C00CDA06E /* TransactionDBModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
 		};
-		60289F542252124800F7548D /* Utils */ = {
+		60289F542252124800F7548D /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				60289F552252128E00F7548D /* DoubleUtils.swift */,
+				60289F552252128E00F7548D /* Double+date.swift */,
+				6074B4992254735700CDA06E /* Array+remove.swift */,
 			);
-			path = Utils;
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		6074B49B2254943300CDA06E /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				6074B49C2254944000CDA06E /* DBManger.swift */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -204,15 +236,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6074B47422534D8900CDA06E /* TxHashDetailViewController.swift in Sources */,
+				6074B476225367CF00CDA06E /* BlockModelByTxHash.swift in Sources */,
+				6074B49822545F9B00CDA06E /* DatabaseViewController.swift in Sources */,
+				6074B49A2254735700CDA06E /* Array+remove.swift in Sources */,
 				60289F39224CC10700F7548D /* MobileTracker.xcdatamodeld in Sources */,
+				6074B49D2254944000CDA06E /* DBManger.swift in Sources */,
 				60289F4A224DA7F300F7548D /* Request.swift in Sources */,
+				6074B4A12254A86C00CDA06E /* TransactionDBModel.swift in Sources */,
 				60289F4E224DAC3900F7548D /* Network.swift in Sources */,
-				60289F33224CC10700F7548D /* ViewController.swift in Sources */,
-				60289F562252128E00F7548D /* DoubleUtils.swift in Sources */,
+				60289F33224CC10700F7548D /* MainViewController.swift in Sources */,
+				60289F562252128E00F7548D /* Double+date.swift in Sources */,
 				60289F31224CC10700F7548D /* AppDelegate.swift in Sources */,
+				6074B4962253837300CDA06E /* DetailPopUpViewController.swift in Sources */,
 				60289F4C224DA8F100F7548D /* API.swift in Sources */,
 				60289F51224DAF6400F7548D /* BlockModel.swift in Sources */,
 				60289F532251CAE700F7548D /* BlockDetailViewController.swift in Sources */,
+				6074B49F2254A61500CDA06E /* BlockDBModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

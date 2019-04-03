@@ -16,7 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        let network = Network()
+        
+        let request = Request(method: .getLastBlock, params: nil)
+        network.sendRequest(request: request)
+        
+        for _ in 1...9 {
+            let req = Request(method: .getBlockByHeight, params: ["height": "0x" + String(Network.lastHeight-1, radix: 16)])
+            
+            network.sendRequest(request: req)
+        }
+        
         return true
     }
 

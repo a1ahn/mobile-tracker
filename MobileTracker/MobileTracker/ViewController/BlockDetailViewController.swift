@@ -15,33 +15,35 @@ class BlockDetailViewController: UIViewController {
     
     
     // MARK:- Variables
-    var block:BlockModel?
+    var block: BlockModel?
+    var blockInfoArray = [String]() // block info array
+    var txHashArray = [BlockModel.TransactionInfo]()
     
     
     
     // MARK:- Constants
-    let sectionTitle = ["Block", "Transaction"]
+    let sectionTitle = ["Block Info", "Transactions"]
+    let blockInfoTitle = ["Block Hash", "Prev Hash", "MTR Hash", "Signature", "Block Height"]
     
     
     
+    // MARK:- Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let list = block?.result.confirmedTransactionList.first else {
+        guard let blockResult = block?.result else {
             return
         }
         
-        print(list.from)
-        print(list.nid)
-        print(list.signature)
-        print(list.stepLimit)
-        print(list.timestamp)
-        print(list.to)
-        print(list.txHash)
-        print(list.value)
-        print(list.version)
+        self.blockInfoArray.append(blockResult.blockHash)
+        self.blockInfoArray.append(blockResult.prevBlockHash)
+        self.blockInfoArray.append(blockResult.merkleTreeRootHash)
+        self.blockInfoArray.append(blockResult.signature)
+        self.blockInfoArray.append(String(blockResult.height))
         
-        
+        for transaction in blockResult.confirmedTransactionList {
+            txHashArray.append(transaction)
+        }
     }
 }
 
@@ -57,18 +59,91 @@ extension BlockDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self.sectionTitle[section]
     }
+    
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            let txHashDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "TxHashDetailViewController") as! TxHashDetailViewController
+            txHashDetailVC.txHash = self.txHashArray[indexPath.row].txHash
+
+            self.navigationController?.pushViewController(txHashDetailVC, animated: true)
+        }
+    }
 }
 
 
 
 extension BlockDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        switch section {
+        case 0:
+            return self.blockInfoTitle.count
+        case 1:
+            return self.txHashArray.count
+        default:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        switch indexPath.section {
+        case 0: // block detail section
+            let blockDetailCell = tableView.dequeueReusableCell(withIdentifier: "BlockDetailCell") as! BlockDetailCell
+            
+            blockDetailCell.titleLabel.text = self.blockInfoTitle[indexPath.row]
+            blockDetailCell.contentLabel.text = self.blockInfoArray[indexPath.row]
+            
+            return blockDetailCell
+        default: // transactions section
+            let transactionCell = tableView.dequeueReusableCell(withIdentifier: "TransactionCell") as! TransactionCell
+            
+            transactionCell.txHashLabel.text = self.txHashArray[indexPath.row].txHash
+            transactionCell.fromLabel.text = self.txHashArray[indexPath.row].from
+            transactionCell.toLabel.text = self.txHashArray[indexPath.row].to
+            
+            return transactionCell
+        }
     }
     
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0:
+            return 50
+        default:
+            return 120
+        }
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let detailPopUpVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailPopUpViewController") as! DetailPopUpViewController
+        
+        self.addChild(detailPopUpVC)
+        self.view.addSubview(detailPopUpVC.view)
+        
+        // 해당 셀의 내용 전달
+        let title = self.blockInfoTitle[indexPath.row]
+        let content = self.blockInfoArray[indexPath.row]
+        
+        detailPopUpVC.titleLabel.text = title
+        detailPopUpVC.contentLabel.text = content
+    }
+}
+
+
+
+class BlockDetailCell: UITableViewCell {
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var contentLabel: UILabel!
+}
+
+
+
+class TransactionCell: UITableViewCell {
+    @IBOutlet var txHashLabel: UILabel!
+    @IBOutlet var fromLabel: UILabel!
+    @IBOutlet var toLabel: UILabel!
 }
