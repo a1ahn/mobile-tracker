@@ -37,28 +37,45 @@ class MainViewController: UIViewController {
         }
     }
     var isPick = false // 선택을 클릭 했는지 안했는지 확인하는 플래그
+    var selectedBlock = [BlockModel]() // 선택한 blockList
     
-    var selectedBlock = [BlockModel]()
-    
-    
+//    lazy var refreshControl: UIRefreshControl = {
+//        let refreshControl = UIRefreshControl()
+//        refreshControl.addTarget(self, action:
+//            #selector(MainViewController.handleRefresh(_:)),
+//                                 for: UIControl.Event.valueChanged)
+//        refreshControl.tintColor = UIColor.red
+//
+//        return refreshControl
+//    }()
+//
+//    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+//        MainViewController.blockList.removeAll()
+//        self.indicator.isHidden = true
+//
+//        let network = Network()
+//
+//        DispatchQueue.global().async {
+//            let request = Request(method: .getLastBlock, params: nil)
+//            network.sendRequest(request: request)
+//
+//            for _ in 1...9 {
+//                let req = Request(method: .getBlockByHeight, params: ["height": "0x" + String(Network.lastHeight-1, radix: 16)])
+//
+//                network.sendRequest(request: req)
+//            }
+//        }
+//
+//        self.tableView.reloadData()
+//        refreshControl.endRefreshing()
+//    }
     
     
     // MARK:- Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.indicator.startAnimating()
-        
-//        let network = Network()
-//        
-//        let request = Request(method: .getLastBlock, params: nil)
-//        network.sendRequest(request: request)
-//        
-//        for _ in 1...9 {
-//            let req = Request(method: .getBlockByHeight, params: ["height": "0x" + String(Network.lastHeight-1, radix: 16)])
-//            
-//            network.sendRequest(request: req)
-//        }
+//        self.tableView.addSubview(self.refreshControl)
     }
     
     
@@ -90,6 +107,7 @@ class MainViewController: UIViewController {
     
     
     func pullToRefresh() {
+        self.indicator.startAnimating()
         refreshFlag = true
         
         // 비동기 처리
@@ -103,25 +121,6 @@ class MainViewController: UIViewController {
             self.refreshFlag = false
         }
     }
-    
-    
-    
-//    func save(block: BlockModel) -> Bool {
-//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        let context = appDelegate.persistentContainer.viewContext
-//        
-//        let object = NSEntityDescription.insertNewObject(forEntityName: "Block", into: context)
-//        
-//        object.setValue(block.result.blockHash, forKey: "blockHash")
-//        
-//        do {
-//            try context.save()
-//            return true
-//        } catch {
-//            context.rollback()
-//            return false
-//        }
-//    }
     
     
     

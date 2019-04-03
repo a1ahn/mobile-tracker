@@ -25,12 +25,15 @@
                                     <rect key="frame" x="0.0" y="108" width="375" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Nfx-NI-dd8">
-                                            <rect key="frame" x="177" y="5" width="20" height="20"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Nfx-NI-dd8">
+                                            <rect key="frame" x="177.5" y="5" width="20" height="20"/>
                                         </activityIndicatorView>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="Nfx-NI-dd8" firstAttribute="centerY" secondItem="gJf-vE-bcz" secondAttribute="centerY" id="CRH-ol-Zje"/>
+                                        <constraint firstItem="Nfx-NI-dd8" firstAttribute="centerX" secondItem="gJf-vE-bcz" secondAttribute="centerX" id="Drt-EO-rbp"/>
+                                    </constraints>
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="blockCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="blockCell" rowHeight="80" id="I7B-JS-U5Y" customClass="blockCell" customModule="MobileTracker" customModuleProvider="target">
