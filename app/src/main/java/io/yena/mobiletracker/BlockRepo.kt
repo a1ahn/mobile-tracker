@@ -27,24 +27,23 @@ class BlockRepo(application: Application) {
         return blocks
     }
 
-    fun loadBlocks() {
-        /***
-         * 최초 -> 처음 + 나머지 9개
-         * 하단 새로고침 -> 마지막 블럭 해쉬 + 10개
-         */
-        getTenBlocks()
+    fun loadBlocks(startHash: String) {
+        getTenBlocks(startHash)
     }
 
-
-    private fun getTenBlocks() {
+    private fun getTenBlocks(startHash: String) {
         val currentList = arrayListOf<Block>()
         if (blocks.value != null) { currentList.addAll(blocks.value as ArrayList<Block>) }
 
         // TODO - 에러 처리하고 toast 띄우기
-
+        var firstBlock: Block
         val thread = Thread(Runnable {
             try {
-                val firstBlock = getLastBlock()
+                firstBlock = if (startHash.isNullOrEmpty()) {
+                    getLastBlock()
+                } else {
+                    getBlockByHash(startHash)
+                }
                 currentList.add(firstBlock)
                 var blockHash = firstBlock.parseResult().prev_block_hash
                 Log.d("MY_TAG", "first hash = $blockHash")
@@ -135,9 +134,9 @@ class BlockRepo(application: Application) {
         with(urlConnection) {
             requestMethod = "POST"
             setRequestProperty("Content-Type", "application/json")
-//            setRequestProperty("Accept", "application/json")
             doOutput = true
             doInput = true
+            connectTimeout = 10000
             connect()
         }
 
@@ -170,9 +169,9 @@ class BlockRepo(application: Application) {
         with(urlConnection) {
             requestMethod = "POST"
             setRequestProperty("Content-Type", "application/json")
-//            setRequestProperty("Accept", "application/json")
             doOutput = true
             doInput = true
+            connectTimeout = 10000
             connect()
         }
 

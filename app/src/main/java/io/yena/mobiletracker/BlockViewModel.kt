@@ -14,8 +14,7 @@ class BlockViewModel(application: Application): AndroidViewModel(application) {
         return this.blocks
     }
 
-    fun loadBlocks() {
-        repo.loadBlocks()
+    fun loadBlocks(startHash: String) {
+        repo.loadBlocks(startHash)
     }
-
 }

@@ -37,4 +37,8 @@ class BlockAdapter: RecyclerView.Adapter<BlockAdapter.ViewHolder>() {
         this.blocks = blocks
         notifyDataSetChanged()
     }
+
+    fun getLastItemHash(): String {
+        return blocks.last().parseResult().block_hash
+    }
 }
