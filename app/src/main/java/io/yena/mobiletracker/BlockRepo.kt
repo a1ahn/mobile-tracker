@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import io.yena.mobiletracker.db.Block
+import io.yena.mobiletracker.db.BlockDatabase
 import io.yena.mobiletracker.models.TransactionByHashResult
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -17,54 +18,75 @@ import kotlin.Exception
 
 class BlockRepo(application: Application) {
 
-    // TODO - db, dao
-    private var blocks = MutableLiveData<List<Block>>()
+    private val blockDb = BlockDatabase.getInstance(application)!!
+    private val blockDao = blockDb.blockDao()
+    private var currentBlocks = MutableLiveData<List<Block>>()
+    private var savedBlocks = MutableLiveData<List<Block>>()
 
     private val baseUrl = URL("https://bicon.net.solidwallet.io/api/v3")
     private lateinit var urlConnection: HttpURLConnection
 
-    fun getAllBlocks(): LiveData<List<Block>> {
-        return blocks
+    fun getCurrentBlocks(): LiveData<List<Block>> {
+        return currentBlocks
     }
 
-    fun loadBlocks(startHash: String) {
+    fun getSavedBlocks(): LiveData<List<Block>> {
+        return savedBlocks
+    }
+
+    fun getBlocksFromApi(startHash: String) {
         getTenBlocks(startHash)
     }
 
-    private fun getTenBlocks(startHash: String) {
-        val currentList = arrayListOf<Block>()
-        if (blocks.value != null) { currentList.addAll(blocks.value as ArrayList<Block>) }
+    fun saveBlocksInPosition(positions: List<Int>) {
+        val thread = Thread(Runnable {
+            try {
+                for (i in 0 until positions.size) {
+                    currentBlocks.value?.get(positions[i])?.let { block ->
+                        blockDao.insert(block)
+                        Log.d("MY_TAG", "block ${positions[i]}, ${block.parseResult().block_hash}")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d("MY_TAG", "save error - $e")
+                e.printStackTrace()
+            }
+        })
+        thread.start()
+    }
 
-        // TODO - 에러 처리하고 toast 띄우기
+    private fun getTenBlocks(startHash: String) {
+        val holdingList = arrayListOf<Block>() // 더 로드하기 전에, 이전에 가지고 있던 리스트 임시 저장
+        if (currentBlocks.value != null) { holdingList.addAll(currentBlocks.value as ArrayList<Block>) }
+
         var firstBlock: Block
         val thread = Thread(Runnable {
             try {
-                firstBlock = if (startHash.isNullOrEmpty()) {
+                // 파라미터 startHash가 ""면 첫번째는 getLastBlock, startHash가 있으면 getBlockByHash
+                firstBlock = if (startHash.isEmpty()) {
                     getLastBlock()
                 } else {
                     getBlockByHash(startHash)
                 }
-                currentList.add(firstBlock)
+                holdingList.add(firstBlock)
                 var blockHash = firstBlock.parseResult().prev_block_hash
-                Log.d("MY_TAG", "first hash = $blockHash")
 
+                // 나머지 9개 Block은 getBlockByHash로 로드
                 for (i in 0..8) {
-                    Log.d("MY_TAG", "i = $i, blockhash = $blockHash")
-
+                    Log.d("MY_TAG", "i = $i, prev hash = $blockHash")
                     val nextBlock = getBlockByHash(blockHash)
                     blockHash = nextBlock.parseResult().prev_block_hash
-                    currentList.add(nextBlock)
+                    holdingList.add(nextBlock)
                 }
             } catch(fne: FileNotFoundException) {
                 Log.d("MY_TAG", "file not found error - $fne")
                 fne.printStackTrace()
-
             } catch (e: Exception) {
                 Log.d("MY_TAG", "getTenBlocksError - $e")
                 e.printStackTrace()
             } finally {
                 urlConnection.disconnect()
-                blocks.postValue(currentList.toList())
+                currentBlocks.postValue(holdingList.toList())
             }
         })
         thread.start()
@@ -221,8 +243,7 @@ class BlockRepo(application: Application) {
         return block
     }
 
-
-    // TODO - transaction 데이터 받아올 때 사용/수정
+    // transaction 데이터 받아올 때 사용/수정
     private fun parseTransactionByHashResult(resultString: String): TransactionByHashResult {
         val jsonObj = JSONObject(resultString)
         val result = TransactionByHashResult()

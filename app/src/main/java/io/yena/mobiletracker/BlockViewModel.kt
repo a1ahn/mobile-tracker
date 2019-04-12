@@ -8,13 +8,22 @@ import io.yena.mobiletracker.db.Block
 class BlockViewModel(application: Application): AndroidViewModel(application) {
 
     private val repo = BlockRepo(application)
-    private val blocks = repo.getAllBlocks()
+    private val currentBlocks = repo.getCurrentBlocks()
+    private val savedBlocks = repo.getSavedBlocks()
 
-    fun getAllBlocks(): LiveData<List<Block>> {
-        return this.blocks
+    fun getCurrentBlocks(): LiveData<List<Block>> {
+        return this.currentBlocks
     }
 
-    fun loadBlocks(startHash: String) {
-        repo.loadBlocks(startHash)
+    fun getSavedBlocks(): LiveData<List<Block>> {
+        return this.savedBlocks
+    }
+
+    fun getBlocksFromApi(startHash: String) {
+        repo.getBlocksFromApi(startHash)
+    }
+
+    fun saveBlocksInPosition(positions: List<Int>) {
+        repo.saveBlocksInPosition(positions)
     }
 }
