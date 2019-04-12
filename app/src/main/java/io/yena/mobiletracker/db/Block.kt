@@ -3,7 +3,7 @@ package io.yena.mobiletracker.db
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.util.Log
-import io.yena.mobiletracker.BlockResult
+import io.yena.mobiletracker.models.BlockResult
 import org.json.JSONObject
 
 @Entity
@@ -38,4 +38,6 @@ data class Block(
 
         return blockResult
     }
+
+
 }

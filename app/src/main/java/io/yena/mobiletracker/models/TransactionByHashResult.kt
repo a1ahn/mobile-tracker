@@ -1,4 +1,4 @@
-package io.yena.mobiletracker
+package io.yena.mobiletracker.models
 
 class TransactionByHashResult(
     var version: String,
@@ -20,3 +20,4 @@ class TransactionByHashResult(
     constructor(): this("", "", "", "", "", "", "", "", "",
         "", "", "", "", "", "")
 }
+

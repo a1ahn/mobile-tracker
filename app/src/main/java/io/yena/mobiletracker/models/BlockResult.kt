@@ -1,4 +1,4 @@
-package io.yena.mobiletracker
+package io.yena.mobiletracker.models
 
 class BlockResult(
     var version: String,

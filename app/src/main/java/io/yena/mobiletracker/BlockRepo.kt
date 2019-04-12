@@ -1,9 +1,11 @@
 package io.yena.mobiletracker
 
+import android.app.Application
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import io.yena.mobiletracker.db.Block
+import io.yena.mobiletracker.models.TransactionByHashResult
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -13,21 +15,32 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.Exception
 
-class BlockRepo {
+class BlockRepo(application: Application) {
 
+    // TODO - db, dao
     private var blocks = MutableLiveData<List<Block>>()
-    private val baseUrl = URL("https://bicon.net.solidwallet.io/api/v3")
-    lateinit var urlConnection: HttpURLConnection
 
-    fun getBlockHashList(): LiveData<List<Block>> {
+    private val baseUrl = URL("https://bicon.net.solidwallet.io/api/v3")
+    private lateinit var urlConnection: HttpURLConnection
+
+    fun getAllBlocks(): LiveData<List<Block>> {
         return blocks
     }
 
+    fun loadBlocks() {
+        /***
+         * 최초 -> 처음 + 나머지 9개
+         * 하단 새로고침 -> 마지막 블럭 해쉬 + 10개
+         */
+        getTenBlocks()
+    }
 
-    fun getTenBlocks() {
+
+    private fun getTenBlocks() {
         val currentList = arrayListOf<Block>()
         if (blocks.value != null) { currentList.addAll(blocks.value as ArrayList<Block>) }
 
+        // TODO - 에러 처리하고 toast 띄우기
 
         val thread = Thread(Runnable {
             try {
@@ -56,7 +69,6 @@ class BlockRepo {
             }
         })
         thread.start()
-
     }
 
 
@@ -123,7 +135,7 @@ class BlockRepo {
         with(urlConnection) {
             requestMethod = "POST"
             setRequestProperty("Content-Type", "application/json")
-            setRequestProperty("Accept", "application/json")
+//            setRequestProperty("Accept", "application/json")
             doOutput = true
             doInput = true
             connect()
@@ -158,7 +170,7 @@ class BlockRepo {
         with(urlConnection) {
             requestMethod = "POST"
             setRequestProperty("Content-Type", "application/json")
-            setRequestProperty("Accept", "application/json")
+//            setRequestProperty("Accept", "application/json")
             doOutput = true
             doInput = true
             connect()
@@ -211,30 +223,7 @@ class BlockRepo {
     }
 
 
-//    private fun parseResult(resultString: String): BlockResult {
-//        val jsonObj = JSONObject(resultString)
-//        val result = BlockResult()
-//
-//        try {
-//            with(jsonObj) {
-//                result.version = getString("version")
-//                result.prev_block_hash = getString("prev_block_hash")
-//                result.merkle_tree_root_hash = getString("merkel_tree_root_hash")
-//                result.timestamp = getString("timestamp")
-//                result.confirmed_transaction_list = getString("confirmed_transaction_list")
-//                result.block_hash = getString("block_hash")
-//                result.height = getString("height")
-//                result.peer_id = getString("peer_id")
-//                result.signature = getString("signature")
-//            }
-//        } catch (e: Exception) {
-//            Log.d("MY_TAG", "error, parseResult - $e")
-//            e.printStackTrace()
-//        }
-//
-//        return result
-//    }
-
+    // TODO - transaction 데이터 받아올 때 사용/수정
     private fun parseTransactionByHashResult(resultString: String): TransactionByHashResult {
         val jsonObj = JSONObject(resultString)
         val result = TransactionByHashResult()
