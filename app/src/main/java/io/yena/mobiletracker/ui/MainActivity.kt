@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import io.yena.mobiletracker.BlockViewModel
 import io.yena.mobiletracker.R
 import io.yena.mobiletracker.db.Block
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(BlockViewModel::class.java)
         viewModel.getCurrentBlocks().observe(this, Observer<List<Block>> {
             blockAdapter!!.setBlocks(it!!)
-                // TODO - 로딩창 해제하기
+            main_loading.visibility = View.GONE
 
         })
 
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startLoadingBlocksFromApi(startHash: String) {
-        // TODO - 로딩창 보여주기
+        main_loading.visibility = View.VISIBLE
         viewModel.getBlocksFromApi(startHash)
     }
 }

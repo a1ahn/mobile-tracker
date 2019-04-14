@@ -19,11 +19,11 @@ class BlockViewModel(application: Application): AndroidViewModel(application) {
         return this.savedBlocks
     }
 
-    fun getBlocksFromApi(startHash: String) {
-        repo.getBlocksFromApi(startHash)
-    }
-
     fun saveBlocksInPosition(positions: List<Int>) {
         repo.saveBlocksInPosition(positions)
+    }
+
+    fun getBlocksFromApi(startHash: String) {
+       repo.getBlocksFromApi(startHash)
     }
 }

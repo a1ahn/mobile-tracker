@@ -7,6 +7,9 @@ import android.util.Log
 import io.yena.mobiletracker.db.Block
 import io.yena.mobiletracker.db.BlockDatabase
 import io.yena.mobiletracker.models.TransactionByHashResult
+import io.yena.mobiletracker.utils.ApiConnection
+import io.yena.mobiletracker.utils.ApiConnection.ICX_GET_BLOCK_BY_HASH
+import io.yena.mobiletracker.utils.ApiConnection.ICX_GET_LAST_BLOCK
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -23,7 +26,7 @@ class BlockRepo(application: Application) {
     private var currentBlocks = MutableLiveData<List<Block>>()
     private var savedBlocks = MutableLiveData<List<Block>>()
 
-    private val baseUrl = URL("https://bicon.net.solidwallet.io/api/v3")
+//    private val baseUrl = URL("https://bicon.net.solidwallet.io/api/v3")
     private lateinit var urlConnection: HttpURLConnection
 
     fun getCurrentBlocks(): LiveData<List<Block>> {
@@ -63,24 +66,31 @@ class BlockRepo(application: Application) {
         val thread = Thread(Runnable {
             try {
                 // 파라미터 startHash가 ""면 첫번째는 getLastBlock, startHash가 있으면 getBlockByHash
-                firstBlock = if (startHash.isEmpty()) {
-                    getLastBlock()
+                val result: String
+
+                if (startHash.isEmpty()) {
+                    result = getLastBlockResult()
+                    Log.d("MY_TAG", "result = $result")
+                    if (result != "OK") {
+                        return@Runnable
+                    }
+
                 } else {
-                    getBlockByHash(startHash)
+                    result = getBlockByHashResult(startHash)
                 }
+
+                firstBlock = convertToBlock(result)
+
                 holdingList.add(firstBlock)
                 var blockHash = firstBlock.parseResult().prev_block_hash
 
                 // 나머지 9개 Block은 getBlockByHash로 로드
                 for (i in 0..8) {
                     Log.d("MY_TAG", "i = $i, prev hash = $blockHash")
-                    val nextBlock = getBlockByHash(blockHash)
+                    val nextBlock = convertToBlock(getBlockByHashResult(blockHash))
                     blockHash = nextBlock.parseResult().prev_block_hash
                     holdingList.add(nextBlock)
                 }
-            } catch(fne: FileNotFoundException) {
-                Log.d("MY_TAG", "file not found error - $fne")
-                fne.printStackTrace()
             } catch (e: Exception) {
                 Log.d("MY_TAG", "getTenBlocksError - $e")
                 e.printStackTrace()
@@ -150,25 +160,11 @@ class BlockRepo(application: Application) {
 //        var currentBlockStringList = arrayListOf<String>()
 //    }
 
-    private fun getLastBlock(): Block {
-        urlConnection = baseUrl.openConnection() as HttpURLConnection
+    private fun getLastBlockResult(): String {
+        urlConnection = ApiConnection.getUrlConnection()
+        urlConnection.connect()
 
-        with(urlConnection) {
-            requestMethod = "POST"
-            setRequestProperty("Content-Type", "application/json")
-            doOutput = true
-            doInput = true
-            connectTimeout = 10000
-            connect()
-        }
-
-        val jsonParam = JSONObject()
-        with(jsonParam) {
-            put("jsonrpc", "2.0")
-            put("method", "icx_getLastBlock")
-            put("id", "3")
-            Log.d("MY_TAG", "json - $this")
-        }
+        val jsonParam = ApiConnection.getJSONObject(ICX_GET_LAST_BLOCK)
 
         val outputStream = DataOutputStream(urlConnection.outputStream)
         outputStream.writeBytes(jsonParam.toString())
@@ -176,37 +172,27 @@ class BlockRepo(application: Application) {
         outputStream.flush()
         outputStream.close()
 
-        val bufferedReader = BufferedReader(InputStreamReader(urlConnection.inputStream))
-        val bff = StringBuffer()
+        if (urlConnection.responseCode == 200) {
+            val bufferedReader = BufferedReader(InputStreamReader(urlConnection.inputStream))
+            val bff = StringBuffer()
 
-        for (line in bufferedReader.readLines()) {
-            bff.append(line)
+            for (line in bufferedReader.readLines()) { bff.append(line) }
+
+            return bff.toString()
+
+        } else {
+            urlConnection.disconnect()
+            return urlConnection.responseMessage
         }
 
-        return convertToBlock(bff.toString())
     }
 
-    private fun getBlockByHash(hashString: String): Block {
-        urlConnection = baseUrl.openConnection() as HttpURLConnection
-        with(urlConnection) {
-            requestMethod = "POST"
-            setRequestProperty("Content-Type", "application/json")
-            doOutput = true
-            doInput = true
-            connectTimeout = 10000
-            connect()
-        }
+    private fun getBlockByHashResult(hashString: String): String {
+        urlConnection = ApiConnection.getUrlConnection()
+        urlConnection.connect()
 
-        val jsonParam = JSONObject()
         val secondParam = JSONObject().put("hash", "0x$hashString")
-
-        with(jsonParam) {
-            put("jsonrpc", "2.0")
-            put("id", "3")
-            put("method", "icx_getBlockByHash")
-            put("params", secondParam)
-            Log.d("MY_TAG", "json - $this")
-        }
+        val jsonParam = ApiConnection.getJSONObject(ICX_GET_BLOCK_BY_HASH, secondParam)
 
         val outputStream = DataOutputStream(urlConnection.outputStream)
         outputStream.writeBytes(jsonParam.toString())
@@ -214,14 +200,20 @@ class BlockRepo(application: Application) {
         outputStream.flush()
         outputStream.close()
 
-        val bufferedReader = BufferedReader(InputStreamReader(urlConnection.inputStream))
-        val bff = StringBuffer()
+        if (urlConnection.responseCode == 200) {
+            val bufferedReader = BufferedReader(InputStreamReader(urlConnection.inputStream))
+            val bff = StringBuffer()
 
-        for (line in bufferedReader.readLines()) {
-            bff.append(line)
+            for (line in bufferedReader.readLines()) {
+                bff.append(line)
+            }
+
+            return bff.toString()
+
+        } else {
+            urlConnection.disconnect()
+            return urlConnection.responseMessage
         }
-
-        return convertToBlock(bff.toString())
     }
 
 
