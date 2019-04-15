@@ -21,7 +21,7 @@ public class rpcConnection {
     private static String TAG = "rpcConnection";
     public static final String API_ENDPOINT = "https://bicon.net.solidwallet.io/api/v3";
 
-    public static rpcResponse connect(rpcRequest request) {
+    public static rpcResponse connect(rpcRequest request) throws rpcRequestException, rpcResponseException {
         HttpsURLConnection conn = null;
         rpcResponse response = null;
         Log.d(TAG, "connecting...");
@@ -45,7 +45,7 @@ public class rpcConnection {
             String resp_msg = conn.getResponseMessage();
             Log.d(TAG, resp_code + ": " + resp_msg);
             if (!(200 <= resp_code && resp_code < 300)){
-                throw new Exception(resp_code + ": " + resp_msg);
+                throw new rpcRequestException(resp_code, resp_msg);
             }
 
             StringBuilder sb = new StringBuilder();
@@ -65,8 +65,6 @@ public class rpcConnection {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (conn != null) {

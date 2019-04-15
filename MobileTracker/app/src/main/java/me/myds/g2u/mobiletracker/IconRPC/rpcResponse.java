@@ -6,30 +6,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class rpcResponse {
-
     public String jsonrpc = null;
-    public int id = -1;
+    public Integer id = null;
 
     public Object result = null;
 
-    public Integer error_code = null;
-    public String error_msg = null;
-
     public JSONObject json_data = null;
 
-    public rpcResponse(String json_string) {
+    public rpcResponse(String json_string) throws rpcResponseException {
         try {
             this.json_data = new JSONObject(json_string);
-
             this.jsonrpc = this.json_data.getString("jsonrpc");
             this.id = this.json_data.getInt("id");
+
             if (!this.json_data.isNull("error")) {
                 JSONObject error = this.json_data.getJSONObject("error");
-                this.error_code = error.getInt("code");
-                this.error_msg = error.getString("message");
-            } else {
+                int error_code = error.getInt("code");
+                String error_msg = error.getString("message");
+                throw new rpcResponseException(error_code, error_msg);
+            }
+            else {
                 this.result = this.json_data.get("result");
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
