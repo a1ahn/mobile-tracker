@@ -10,10 +10,17 @@ import org.json.JSONObject
 data class Block(
 
     var jsonrpc: String,
-    @PrimaryKey var id: Int,
-    var result: String
+
+    var id: Int,
+
+    var result: String,
+
+    @PrimaryKey var block_hash: String,
+
+    var saved: Boolean = false
+
 ) {
-    constructor(): this("", -1, "")
+    constructor(): this("", 0, "", "", false)
 
     fun parseResult(): BlockResult {
         val jsonObj = JSONObject(result)
@@ -24,7 +31,7 @@ data class Block(
                 blockResult.version = getString("version")
                 blockResult.prev_block_hash = getString("prev_block_hash")
                 blockResult.merkle_tree_root_hash = getString("merkle_tree_root_hash")
-                blockResult.time_stamp = getLong("time_stamp")
+                blockResult.time_stamp = getString("time_stamp")
                 blockResult.confirmed_transaction_list = getString("confirmed_transaction_list")
                 blockResult.block_hash = getString("block_hash")
                 blockResult.height = getString("height")
@@ -38,6 +45,4 @@ data class Block(
 
         return blockResult
     }
-
-
 }

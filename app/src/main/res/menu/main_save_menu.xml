@@ -3,9 +3,17 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+            android:id="@+id/menu_cancel"
+            android:icon="@drawable/ic_close_white_24dp"
+            android:title="Cancel"
+            android:visible="false"
+            app:showAsAction="ifRoom" />
+
+    <item
             android:id="@+id/menu_save"
             android:icon="@drawable/ic_save_white_24dp"
             android:title="Save"
-            app:showAsAction="always"/>
+            android:visible="true"
+            app:showAsAction="ifRoom"/>
 
 </menu>

@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 
-@Database(entities = [Block::class], version = 1)
+@Database(entities = [Block::class], version = 2)
 abstract class BlockDatabase: RoomDatabase() {
     abstract fun blockDao(): BlockDao
 

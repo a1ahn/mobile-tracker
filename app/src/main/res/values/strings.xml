@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MobileTracker</string>
+    <string name="string_loading_text">서버로부터 정보를 불러오는 중입니다.</string>
 </resources>

@@ -1,10 +1,7 @@
 package io.yena.mobiletracker.db
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 
 @Dao
 interface BlockDao {
@@ -18,4 +15,9 @@ interface BlockDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(blocks: List<Block>)
 
+    @Query("SELECT * FROM block WHERE block_hash IS :hash")
+    fun getByHash(hash: String): Block
+
+    @Query("SELECT block_hash FROM block")
+    fun getAllBlockHashes(): List<String>
 }

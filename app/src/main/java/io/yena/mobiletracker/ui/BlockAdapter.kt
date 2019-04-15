@@ -1,5 +1,6 @@
 package io.yena.mobiletracker.ui
 
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.util.SparseBooleanArray
@@ -10,9 +11,15 @@ import android.widget.TextView
 import io.yena.mobiletracker.R
 import io.yena.mobiletracker.db.Block
 
-class BlockAdapter: RecyclerView.Adapter<BlockAdapter.ViewHolder>() {
+class BlockAdapter(val listener: BlockClickListener): RecyclerView.Adapter<BlockAdapter.ViewHolder>() {
     private var blocks: List<Block> = listOf()
     private val checkStateArray = SparseBooleanArray()
+
+    var saveMode = false
+
+    interface BlockClickListener {
+        fun blockItemClick(block: Block)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_hash, parent, false)
@@ -24,23 +31,42 @@ class BlockAdapter: RecyclerView.Adapter<BlockAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(blocks[position])
+        viewHolder.bind(blocks[position], listener)
     }
 
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        private val hashTextView = itemView.findViewById<TextView>(R.id.item_block_hash_textview)
+        private val bg = itemView.findViewById<ConstraintLayout>(R.id.item_block_constraint_layout)
+        private val boxTextView = itemView.findViewById<TextView>(R.id.item_transaction_from_textview)
+        private val hashTextView = itemView.findViewById<TextView>(R.id.item_transaction_txhash)
 
-        fun bind(block: Block) {
-            hashTextView.text = block.parseResult().block_hash
+        fun bind(block: Block, listener: BlockClickListener) {
+            if (checkStateArray.get(adapterPosition)) {
+                bg.setBackgroundResource(R.color.colorPrimaryLight)
+            } else {
+                bg.setBackgroundResource(android.R.color.transparent)
+            }
+
+            if (block.saved) bg.setBackgroundResource(android.R.color.darker_gray)
+
+            val result = block.parseResult()
+            boxTextView.text = result.height
+            hashTextView.text = result.block_hash
+
             itemView.setOnClickListener {
-                if (!checkStateArray.get(adapterPosition, false)) {
-                    // view 색 바꾸기 (선택됨)
-                    checkStateArray.put(adapterPosition, true)
-                } else {
-                    // view 색 바꾸기 (선택 해제됨)
-                    checkStateArray.put(adapterPosition, false)
+                when (saveMode) {
+                    true -> if (!block.saved) {
+                        if (checkStateArray.get(adapterPosition)) {
+                            checkStateArray.put(adapterPosition, false)
+                        } else {
+                            checkStateArray.put(adapterPosition, true)
+                        }
+                    }
+
+                    false -> listener.blockItemClick(block)
                 }
+
+                notifyItemChanged(adapterPosition)
             }
         }
     }
@@ -57,12 +83,18 @@ class BlockAdapter: RecyclerView.Adapter<BlockAdapter.ViewHolder>() {
         return selectedPositions
     }
 
+    fun clearSelectedPosition() {
+        checkStateArray.clear()
+    }
+
     fun setBlocks(blocks: List<Block>) {
         this.blocks = blocks
         notifyDataSetChanged()
     }
 
     fun getLastItemHash(): String {
-        return blocks.last().parseResult().block_hash
+        return blocks[blocks.size - 1].parseResult().block_hash
     }
+
+
 }
