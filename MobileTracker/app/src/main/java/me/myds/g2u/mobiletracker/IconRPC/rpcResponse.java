@@ -10,10 +10,9 @@ public class rpcResponse {
     public String jsonrpc = null;
     public int id = -1;
 
-    public String strResult = null;
-    public JSONObject result = null;
+    public Object result = null;
 
-    public int error_code = -1;
+    public Integer error_code = null;
     public String error_msg = null;
 
     public JSONObject json_data = null;
@@ -29,12 +28,7 @@ public class rpcResponse {
                 this.error_code = error.getInt("code");
                 this.error_msg = error.getString("message");
             } else {
-                Object o = this.json_data.get("result");
-                if (o instanceof String) {
-                    this.strResult = (String)o;
-                } else {
-                    this.result = (JSONObject)o;
-                }
+                this.result = this.json_data.get("result");
             }
         } catch (JSONException e) {
             e.printStackTrace();

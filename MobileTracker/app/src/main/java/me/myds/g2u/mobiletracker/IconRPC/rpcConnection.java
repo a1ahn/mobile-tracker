@@ -19,32 +19,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class rpcConnection {
     private static String TAG = "rpcConnection";
-
     public static final String API_ENDPOINT = "https://bicon.net.solidwallet.io/api/v3";
-    public interface OnResponse {
-        void onResponse(rpcResponse response);
-    }
 
-    public rpcRequest request = null;
-    public rpcResponse response = null;
-    public OnResponse onResponse = null;
-
-    public rpcConnection(rpcRequest request, OnResponse onResponse){
-        this.request = request;
-        this.onResponse = onResponse;
-        Log.d(TAG, "created");
-
-        final rpcConnection self = this;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                self.response = connect(self.request);
-                self.onResponse.onResponse(self.response);
-            }
-        }).start();
-    }
-
-    public rpcResponse connect(rpcRequest request) {
+    public static rpcResponse connect(rpcRequest request) {
         HttpsURLConnection conn = null;
         rpcResponse response = null;
         Log.d(TAG, "connecting...");

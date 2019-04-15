@@ -10,6 +10,7 @@ public class rpcRequest {
     public static final int NET_TESTNET_DAPPS = 3;
 
     public static final String ICX_GET_LAST_BLOCK = "icx_getLastBlock";
+    public static final String ICX_GET_BLOCK_BY_HASH = "icx_getBlockByHash";
 
     public String jsonrpc = JSONRPC_2_0;
     public String method = null;
