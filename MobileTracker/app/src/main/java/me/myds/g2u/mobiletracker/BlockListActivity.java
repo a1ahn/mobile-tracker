@@ -1,5 +1,6 @@
 package me.myds.g2u.mobiletracker;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import me.myds.g2u.mobiletracker.IconRPC.Block;
+import me.myds.g2u.mobiletracker.IconRPC.Transaction;
 import me.myds.g2u.mobiletracker.IconRPC.rpcConnection;
 import me.myds.g2u.mobiletracker.IconRPC.rpcRequest;
 import me.myds.g2u.mobiletracker.IconRPC.rpcRequestException;
@@ -55,6 +57,18 @@ public class BlockListActivity extends AppCompatActivity{
         mLayoutMgr = new LinearLayoutManager(this);
         mBlockListAdpater = new BaseRecyclerAdapter<Block, BlockViewHolder>(
                 R.layout.item_block, BlockViewHolder.class) {
+            @Override
+            public void onCreateAfterViewHolder(BlockViewHolder holder) {
+                holder.itemView.setOnClickListener((v)->{
+                    int itemPosition = holder.getLayoutPosition();
+                    Block block = mBlockListAdpater.dataList.get(itemPosition);
+                    ArrayList<Transaction> transactions = block.getConfirmedTransactionList();
+                    Intent intent = new Intent(BlockListActivity.this, BlockDetail.class);
+                    intent.putParcelableArrayListExtra(BlockDetail.PARAM_TRANSACTIONS, transactions);
+                    startActivity(intent);
+                });
+            }
+
             @Override
             public void dataConvertViewHolder(BlockViewHolder holder, Block data) {
                 holder.bindData(data);

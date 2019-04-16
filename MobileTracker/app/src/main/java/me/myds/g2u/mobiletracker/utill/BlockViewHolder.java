@@ -9,10 +9,12 @@ import me.myds.g2u.mobiletracker.IconRPC.Block;
 import me.myds.g2u.mobiletracker.R;
 
 public class BlockViewHolder extends RecyclerView.ViewHolder {
+    public View itemView;
     public TextView txtBlockHash;
 
     public BlockViewHolder(@NonNull View itemView) {
         super(itemView);
+        this.itemView = itemView;
         txtBlockHash = itemView.findViewById(R.id.txt_block_hash);
     }
 
