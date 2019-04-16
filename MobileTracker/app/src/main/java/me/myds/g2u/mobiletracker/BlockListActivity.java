@@ -33,7 +33,7 @@ import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
 
 public class BlockListActivity extends AppCompatActivity {
 
-    private static final String TAG = "orgBlockListActivity";
+    private static final String TAG = "BlockListActivity";
     private static final int COMPLETE_LOAD_BLOCKS = 22;
 
     private Toolbar toolbar;
