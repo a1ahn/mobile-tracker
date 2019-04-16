@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker;
+package me.myds.g2u.mobiletracker.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +28,8 @@ import me.myds.g2u.mobiletracker.IconRPC.rpcRequest;
 import me.myds.g2u.mobiletracker.IconRPC.rpcRequestException;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponse;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponseException;
+import me.myds.g2u.mobiletracker.R;
+import me.myds.g2u.mobiletracker.block_db.LocalBlocks;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
 
@@ -52,6 +54,8 @@ public class BlockListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_block_list);
 
+        LocalBlocks.init(this);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,8 +69,10 @@ public class BlockListActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.nav_saved_blocks:
-                    break;
+                case R.id.nav_saved_blocks:{
+                    Intent intent = new Intent(BlockListActivity.this, SavedBlockActivity.class);
+                    startActivity(intent);
+                }break;
             }
             drawer.closeDrawer(GravityCompat.START);
             return true;
@@ -90,8 +96,8 @@ public class BlockListActivity extends AppCompatActivity {
                     int itemPosition = holder.getLayoutPosition();
                     Block block = mBlockListAdpater.dataList.get(itemPosition);
                     ArrayList<Transaction> transactions = block.getConfirmedTransactionList();
-                    Intent intent = new Intent(BlockListActivity.this, BlockDetail.class);
-                    intent.putParcelableArrayListExtra(BlockDetail.PARAM_TRANSACTION_LIST, transactions);
+                    Intent intent = new Intent(BlockListActivity.this, BlockDetailActivity.class);
+                    intent.putParcelableArrayListExtra(BlockDetailActivity.PARAM_TRANSACTION_LIST, transactions);
                     startActivity(intent);
                 });
             }

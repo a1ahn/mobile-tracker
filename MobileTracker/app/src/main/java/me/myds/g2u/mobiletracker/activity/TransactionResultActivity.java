@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker;
+package me.myds.g2u.mobiletracker.activity;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -20,6 +20,7 @@ import me.myds.g2u.mobiletracker.IconRPC.rpcRequest;
 import me.myds.g2u.mobiletracker.IconRPC.rpcRequestException;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponse;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponseException;
+import me.myds.g2u.mobiletracker.R;
 
 public class TransactionResultActivity extends AppCompatActivity {
 

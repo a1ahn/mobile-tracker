@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker;
+package me.myds.g2u.mobiletracker.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +10,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import me.myds.g2u.mobiletracker.IconRPC.Transaction;
+import me.myds.g2u.mobiletracker.R;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.utill.TransactionViewHolder;
 
-public class BlockDetail extends AppCompatActivity {
+public class BlockDetailActivity extends AppCompatActivity {
     public static final String PARAM_TRANSACTION_LIST = "transaction list";
 
     private TextView txtIndicate;
@@ -42,7 +43,7 @@ public class BlockDetail extends AppCompatActivity {
                 holder.itemView.setOnClickListener((v)->{
                     int itemPosition = holder.getLayoutPosition();
                     Transaction transaction = mTransactionListAdpater.dataList.get(itemPosition);
-                    Intent intent = new Intent(BlockDetail.this, TransactionResultActivity.class);
+                    Intent intent = new Intent(BlockDetailActivity.this, TransactionResultActivity.class);
                     intent.putExtra(TransactionResultActivity.PARAM_TRANSACTION, transaction);
                     startActivity(intent);
                 });

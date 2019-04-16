@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.SavedBlockActivity"></activity>
         <activity
-            android:name=".BlockListActivity"
+            android:name=".activity.BlockListActivity"
             android:label="@string/title_activity_block_list"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,8 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TransactionResultActivity" />
-        <activity android:name=".BlockDetail" />
+        <activity android:name=".activity.TransactionResultActivity" />
+        <activity android:name=".activity.BlockDetailActivity" />
     </application>
 
 </manifest>

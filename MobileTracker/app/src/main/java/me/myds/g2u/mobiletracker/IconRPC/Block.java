@@ -12,6 +12,13 @@ public class Block {
     public Block(JSONObject json_data) {
         this.json_data = json_data;
     }
+    public Block(String json_data) {
+        try {
+            this.json_data = new JSONObject(json_data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public String getPrevBlockHash() {
         String prev_block_hash = null;
