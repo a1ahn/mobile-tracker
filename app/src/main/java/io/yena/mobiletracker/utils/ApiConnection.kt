@@ -27,26 +27,22 @@ object ApiConnection {
     }
 
     fun getJSONObject(method: String): JSONObject {
-        Log.d("MY_TAG", "Api.getJSONObject")
         val jsonParam = JSONObject()
         with(jsonParam) {
             put("jsonrpc", "2.0")
             put("method", method)
             put("id", "3")
-            Log.d("MY_TAG", "json - $this")
         }
         return jsonParam
     }
 
     fun getJSONObject(method: String, params: JSONObject): JSONObject {
-        Log.d("MY_TAG", "Api.getJSONObject")
         val jsonParam = JSONObject()
         with(jsonParam) {
             put("jsonrpc", "2.0")
             put("method", method)
             put("id", "3")
             put("params", params)
-            Log.d("MY_TAG", "json - $this")
         }
         return jsonParam
     }

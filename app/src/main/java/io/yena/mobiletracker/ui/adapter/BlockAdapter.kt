@@ -1,8 +1,7 @@
-package io.yena.mobiletracker.ui
+package io.yena.mobiletracker.ui.adapter
 
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,7 @@ import android.widget.TextView
 import io.yena.mobiletracker.R
 import io.yena.mobiletracker.db.Block
 
-class BlockAdapter(val listener: BlockClickListener): RecyclerView.Adapter<BlockAdapter.ViewHolder>() {
+class BlockAdapter(private val listener: BlockClickListener): RecyclerView.Adapter<BlockAdapter.ViewHolder>() {
     private var blocks: List<Block> = listOf()
     private val checkStateArray = SparseBooleanArray()
 
@@ -37,8 +36,8 @@ class BlockAdapter(val listener: BlockClickListener): RecyclerView.Adapter<Block
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val bg = itemView.findViewById<ConstraintLayout>(R.id.item_block_constraint_layout)
-        private val boxTextView = itemView.findViewById<TextView>(R.id.item_transaction_from_textview)
-        private val hashTextView = itemView.findViewById<TextView>(R.id.item_transaction_txhash)
+        private val boxTextView = itemView.findViewById<TextView>(R.id.item_block_box_textview)
+        private val hashTextView = itemView.findViewById<TextView>(R.id.item_block_txhash)
 
         fun bind(block: Block, listener: BlockClickListener) {
             if (checkStateArray.get(adapterPosition)) {
@@ -79,7 +78,6 @@ class BlockAdapter(val listener: BlockClickListener): RecyclerView.Adapter<Block
                 selectedPositions.add(checkStateArray.keyAt(i))
             }
         }
-        Log.d("MY_TAG", "positions = $selectedPositions")
         return selectedPositions
     }
 

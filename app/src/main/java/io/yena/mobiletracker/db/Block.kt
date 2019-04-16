@@ -39,7 +39,6 @@ data class Block(
                 blockResult.signature = getString("signature")
             }
         } catch (e: Exception) {
-            Log.d("MY_TAG", "error, parseResult - $e")
             e.printStackTrace()
         }
 

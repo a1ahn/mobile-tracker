@@ -7,7 +7,6 @@ import android.os.AsyncTask
 import android.util.Log
 import io.yena.mobiletracker.db.Block
 import io.yena.mobiletracker.db.BlockDatabase
-import io.yena.mobiletracker.models.TransactionData
 import io.yena.mobiletracker.utils.ApiConnection
 import io.yena.mobiletracker.utils.ApiConnection.ICX_GET_BLOCK_BY_HASH
 import io.yena.mobiletracker.utils.ApiConnection.ICX_GET_LAST_BLOCK
@@ -23,7 +22,7 @@ class BlockRepo(application: Application) {
     private val blockDb = BlockDatabase.getInstance(application)!!
     private val blockDao = blockDb.blockDao()
     private var currentBlocks = MutableLiveData<List<Block>>()
-//    private var savedBlocks = MutableLiveData<List<Block>>()
+    private var savedBlocks: LiveData<List<Block>> = blockDao.getAll()
     private var mutableToastMessage = MutableLiveData<String>()
 
     private lateinit var urlConnection: HttpURLConnection
@@ -40,9 +39,10 @@ class BlockRepo(application: Application) {
         return currentBlocks
     }
 
-//    fun getSavedBlocks(): LiveData<List<Block>> {
-//        return savedBlocks
-//    }
+    fun getSavedBlocks(): LiveData<List<Block>> {
+
+        return savedBlocks
+    }
 
     fun getBlocksFromApi(startHash: String) {
         getTenBlocks(startHash)
@@ -54,15 +54,12 @@ class BlockRepo(application: Application) {
                 try {
                     // DB와 비교하기 위해 저장된 블럭들의 hash리스트와 비교
                     val savedHashes = blockDao.getAllBlockHashes()
-                    var savedCount = 0
 
                     for (i in 0 until positions.size) {
                         with(currentBlocks.value?.get(positions[i])) {
                             if (!savedHashes.contains(this?.parseResult()?.block_hash)) {
                                 this?.saved = true
                                 this?.let { blockDao.insert(it) }
-                                savedCount++
-                                Log.d("MY_TAG", "block ${positions[i]}, ${this?.parseResult()?.block_hash}. Saved count = $savedCount")
                             }
                         }
                     }
@@ -71,7 +68,6 @@ class BlockRepo(application: Application) {
                     return "저장되었습니다."
 
                 } catch (e: Exception) {
-                    Log.d("MY_TAG", "save error - $e")
                     e.printStackTrace()
                     saveComplete()
                     return "저장에 실패했습니다."
@@ -107,14 +103,13 @@ class BlockRepo(application: Application) {
                     mutableToastMessage.value = "데이터 가져오기에 실패했습니다."
                     return@Runnable
                 } else {
-                    holdingList.add(firstBlock!!)
+                    if (!holdingList.contains(firstBlock!!)) holdingList.add(firstBlock!!)
                 }
 
                 var blockHash = firstBlock!!.parseResult().prev_block_hash
 
                 // 나머지 9개 블럭은 getBlockByHash 로드
                 for (i in 0..8) {
-                    Log.d("MY_TAG", "i = $i, prev hash = $blockHash")
                     val nextBlock = getBlockByHash(blockHash)
 
                     if (nextBlock == null) {
@@ -123,11 +118,10 @@ class BlockRepo(application: Application) {
 
                     } else {
                         blockHash = nextBlock.parseResult().prev_block_hash
-                        holdingList.add(nextBlock)
+                        if (!holdingList.contains(nextBlock)) holdingList.add(nextBlock)
                     }
                 }
             } catch (e: Exception) {
-                Log.d("MY_TAG", "getTenBlocksError - $e")
                 e.printStackTrace()
             } finally {
                 currentBlocks.postValue(holdingList.toList())
@@ -177,7 +171,6 @@ class BlockRepo(application: Application) {
         outputStream.flush()
         outputStream.close()
 
-        Log.d("MY_TAG", "response code = ${urlConnection.responseCode}")
         if (urlConnection.responseCode == 200) {
             val bufferedReader = BufferedReader(InputStreamReader(urlConnection.inputStream))
             val bff = StringBuffer()
@@ -208,7 +201,6 @@ class BlockRepo(application: Application) {
             block.block_hash = block.parseResult().block_hash
 
         } catch (e: Exception) {
-            Log.d("MY_TAG", "error, convertToBlock - $e")
             e.printStackTrace()
         }
 

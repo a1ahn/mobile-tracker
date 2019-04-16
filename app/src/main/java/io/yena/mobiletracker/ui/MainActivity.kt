@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -15,8 +14,8 @@ import android.widget.Toast
 import io.yena.mobiletracker.BlockViewModel
 import io.yena.mobiletracker.R
 import io.yena.mobiletracker.db.Block
+import io.yena.mobiletracker.ui.adapter.BlockAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONArray
 
 class MainActivity : AppCompatActivity(), BlockAdapter.BlockClickListener {
 
@@ -31,13 +30,7 @@ class MainActivity : AppCompatActivity(), BlockAdapter.BlockClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        lm = LinearLayoutManager(this)
-        blockAdapter = BlockAdapter(this)
-        main_recyclerview.apply {
-            this.layoutManager = lm
-            this.adapter = blockAdapter
-            setHasFixedSize(true)
-        }
+        setRecyclerView()
 
         // scroll & load 를 위한 변수
         var lastItem: Int
@@ -46,20 +39,16 @@ class MainActivity : AppCompatActivity(), BlockAdapter.BlockClickListener {
 
         main_recyclerview.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // 세로 스크롤시 && 저장 모드가 아닐 때
-                if (blockAdapter?.saveMode == false) {
-                    if (dy > 0) {
-                        totalItems = lm!!.itemCount - 1 // 마지막 position 가져오기위해 -1
-                        lastItem = lm!!.findLastCompletelyVisibleItemPosition()
+                // 저장 모드가 아닐 때 && 세로 스크롤시
+                if (blockAdapter?.saveMode == false && dy > 0) {
+                    totalItems = lm!!.itemCount - 1 // 마지막 position 가져오기위해 -1
+                    lastItem = lm!!.findLastCompletelyVisibleItemPosition()
 
-                        if (lastItem >= totalItems) { // 현재가 마지막-1 item이라면 더 불러오기
-                            startHash = blockAdapter!!.getLastItemHash()
-                            startLoadingBlocksFromApi(startHash)
-                        }
+                    if (lastItem >= totalItems) { // 현재가 마지막-1 item이라면 더 불러오기
+                        startHash = blockAdapter!!.getLastItemHash()
+                        startLoadingBlocksFromApi(startHash)
                     }
                 }
-
-
             }
         })
 
@@ -80,6 +69,16 @@ class MainActivity : AppCompatActivity(), BlockAdapter.BlockClickListener {
         })
 
         startLoadingBlocksFromApi(startHash)
+    }
+
+    private fun setRecyclerView() {
+        lm = LinearLayoutManager(this)
+        blockAdapter = BlockAdapter(this)
+        main_recyclerview.apply {
+            this.layoutManager = lm
+            this.adapter = blockAdapter
+            setHasFixedSize(true)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -113,6 +112,12 @@ class MainActivity : AppCompatActivity(), BlockAdapter.BlockClickListener {
                 }
             }
 
+            R.id.menu_storage -> {
+                val intent = Intent(this, StorageActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
     }
@@ -132,7 +137,9 @@ class MainActivity : AppCompatActivity(), BlockAdapter.BlockClickListener {
 
     private fun isSaveMode(b: Boolean) {
         val closeItem = menuList.findItem(R.id.menu_cancel)
+        val storageItem = menuList.findItem(R.id.menu_storage)
         closeItem.isVisible = b
+        storageItem.isVisible = !b
 
         if (b) {
             blockAdapter?.saveMode = true
@@ -146,7 +153,7 @@ class MainActivity : AppCompatActivity(), BlockAdapter.BlockClickListener {
     }
 
     override fun blockItemClick(block: Block) {
-        val intent = Intent(this@MainActivity, TransactionActivity::class.java)
+        val intent = Intent(this@MainActivity, TxListActivity::class.java)
         intent.putExtra(INTENT_EXTRA_BLOCK_INFO, block.parseResult().confirmed_transaction_list)
         startActivity(intent)
     }

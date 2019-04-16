@@ -1,4 +1,4 @@
-package io.yena.mobiletracker.ui
+package io.yena.mobiletracker.ui.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

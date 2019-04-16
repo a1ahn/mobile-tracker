@@ -12,20 +12,30 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity"
-                  android:label="Block List">
+
+        <activity
+                android:name=".ui.MainActivity"
+                android:label="Block List">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".ui.TransactionActivity"
-            android:label="Transaction Info"
-            android:parentActivityName=".ui.MainActivity">
+                android:name=".ui.TxListActivity"
+                android:label="Transaction List"
+                android:parentActivityName=".ui.MainActivity">
+        </activity>
+        <activity
+                android:name=".ui.TxDetailActivity"
+                android:label="Transaction Detail"
+                android:parentActivityName=".ui.TxListActivity">
+        </activity>
 
+        <activity android:name=".ui.StorageActivity"
+                  android:label="Saved Blocks"
+                  android:parentActivityName=".ui.MainActivity">
         </activity>
     </application>
 
