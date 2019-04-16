@@ -29,7 +29,7 @@ import me.myds.g2u.mobiletracker.IconRPC.rpcResponseException;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
 
-public class BlockListActivity extends AppCompatActivity{
+public class BlockListActivity extends AppCompatActivity {
 
     private static final String TAG = "BlockListActivity";
     private static final int COMPLETE_LOAD_BLOCKS = 22;
@@ -64,7 +64,7 @@ public class BlockListActivity extends AppCompatActivity{
                     Block block = mBlockListAdpater.dataList.get(itemPosition);
                     ArrayList<Transaction> transactions = block.getConfirmedTransactionList();
                     Intent intent = new Intent(BlockListActivity.this, BlockDetail.class);
-                    intent.putParcelableArrayListExtra(BlockDetail.PARAM_TRANSACTIONS, transactions);
+                    intent.putParcelableArrayListExtra(BlockDetail.PARAM_TRANSACTION_LIST, transactions);
                     startActivity(intent);
                 });
             }
