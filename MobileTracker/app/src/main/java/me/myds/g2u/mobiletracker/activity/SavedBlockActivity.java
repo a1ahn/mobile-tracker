@@ -76,6 +76,7 @@ public class SavedBlockActivity extends AppCompatActivity {
                     add(new Block(entity.body));
                 }
             }});
+            mHandler.sendEmptyMessage(COMPLETE_LOAD_BLOCKS);
         }).start();
     }
 
@@ -83,9 +84,8 @@ public class SavedBlockActivity extends AppCompatActivity {
         @Override
         public void handleMessage(@NotNull Message msg) {
             if(msg.what == COMPLETE_LOAD_BLOCKS) {
-                int successLoadCount = msg.arg1;
                 int length = mBlockListAdpater.dataList.size();
-                txtIndicate.setText(length + " block loaded");
+                txtIndicate.setText(length + " block saved");
                 mBlockListAdpater.notifyDataSetChanged();
             }
         }

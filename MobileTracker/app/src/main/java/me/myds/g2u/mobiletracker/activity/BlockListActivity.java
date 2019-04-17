@@ -111,7 +111,7 @@ public class BlockListActivity extends AppCompatActivity {
                     int itemPosition = holder.getLayoutPosition();
                     Block block = mBlockListAdpater.dataList.get(itemPosition);
 
-                    if (!   selectable) {
+                    if (!selectable) {
                         ArrayList<Transaction> transactions = block.getConfirmedTransactionList();
                         Intent intent = new Intent(BlockListActivity.this, BlockDetailActivity.class);
                         intent.putParcelableArrayListExtra(BlockDetailActivity.PARAM_TRANSACTION_LIST, transactions);
@@ -130,9 +130,9 @@ public class BlockListActivity extends AppCompatActivity {
                 });
                 holder.itemView.setOnLongClickListener(v -> {
                     if (!selectable) {
-                        int itemPosition = holder.getLayoutPosition();
-                        Block block = mBlockListAdpater.dataList.get(itemPosition);
-                        selectedBlocks.put(block.getBlockHash(), block);
+//                        int itemPosition = holder.getLayoutPosition();
+//                        Block block = mBlockListAdpater.dataList.get(itemPosition);
+//                        selectedBlocks.put(block.getBlockHash(), block);
                         setSelectMode(true);
                         return true;
                     }
