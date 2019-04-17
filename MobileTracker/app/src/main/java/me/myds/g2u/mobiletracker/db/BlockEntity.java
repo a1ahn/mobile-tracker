@@ -1,11 +1,16 @@
 package me.myds.g2u.mobiletracker.db;
 
-import androidx.room.Entity;
-import androidx.room.Index;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 
-@Entity(primaryKeys = "block_hash", indices = @Index("block_hash"))
+import org.jetbrains.annotations.NotNull;
+
+@Entity(indices = @Index("block_hash"))
 public class BlockEntity {
 
+    @PrimaryKey
+    @NotNull
     private String block_hash;
     public String getBlock_hash() { return block_hash; }
     public void setBlock_hash(String block_hash) { this.block_hash = block_hash; }

@@ -1,8 +1,7 @@
 package me.myds.g2u.mobiletracker.db;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
-
-import androidx.room.Room;
 
 public class LocalBlocks {
     private static BlocksDB mDB = null;

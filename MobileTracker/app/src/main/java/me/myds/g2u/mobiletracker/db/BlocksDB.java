@@ -1,7 +1,8 @@
 package me.myds.g2u.mobiletracker.db;
 
-import androidx.room.Database;
-import androidx.room.RoomDatabase;
+
+import android.arch.persistence.room.Database;
+import android.arch.persistence.room.RoomDatabase;
 
 @Database(entities = {BlockEntity.class}, version = 1)
 public abstract class BlocksDB extends RoomDatabase {
