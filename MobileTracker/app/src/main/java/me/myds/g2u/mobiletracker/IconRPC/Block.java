@@ -1,5 +1,7 @@
 package me.myds.g2u.mobiletracker.IconRPC;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +30,16 @@ public class Block {
             e.printStackTrace();
         }
         return block_hash;
+    }
+
+    public Long getTimeStamp () {
+        Long time_stamp = null;
+        try {
+            time_stamp = this.json_data.getLong("time_stamp");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return time_stamp;
     }
 
     public String getPrevBlockHash() {

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -14,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +48,7 @@ public class BlockListActivity extends AppCompatActivity {
     private static final String TAG = "BlockListActivity";
     private static final int COMPLETE_LOAD_BLOCKS = 22;
     private static final int COMPLETE_LOAD_SAVED_BLOCKS = 33;
+    private static final int COMPLETE_SAVE_BLOCKS = 44;
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -57,7 +63,7 @@ public class BlockListActivity extends AppCompatActivity {
 
     private boolean selectable = false;
     private HashSet<String> savedBlocks = new HashSet<>();
-    private HashSet<String> selectedBlocks = new HashSet<>();
+    private HashMap<String, Block> selectedBlocks = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +119,10 @@ public class BlockListActivity extends AppCompatActivity {
                     } else {
                         String block_hash = block.getBlockHash();
                         if (!savedBlocks.contains(block_hash)){
-                            if (selectedBlocks.contains(block_hash)) {
+                            if (selectedBlocks.containsKey(block_hash)) {
                                 selectedBlocks.remove(block_hash);
                             } else {
-                                selectedBlocks.add(block_hash);
+                                selectedBlocks.put(block_hash, block);
                             }
                             mBlockListAdpater.notifyItemChanged(itemPosition);
                         }
@@ -126,7 +132,7 @@ public class BlockListActivity extends AppCompatActivity {
                     if (!selectable) {
                         int itemPosition = holder.getLayoutPosition();
                         Block block = mBlockListAdpater.dataList.get(itemPosition);
-                        selectedBlocks.add(block.getBlockHash());
+                        selectedBlocks.put(block.getBlockHash(), block);
                         setSelectMode(true);
                         return true;
                     }
@@ -138,7 +144,7 @@ public class BlockListActivity extends AppCompatActivity {
             public void dataConvertViewHolder(BlockViewHolder holder, Block data) {
                 holder.bindData(data);
                 boolean saved = savedBlocks.contains(data.getBlockHash());
-                boolean selected = selectedBlocks.contains(data.getBlockHash());
+                boolean selected = selectedBlocks.containsKey(data.getBlockHash());
                 if (!selectable) holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                 else {
                     if (saved) holder.itemView.setBackgroundColor(Color.LTGRAY);
@@ -217,15 +223,28 @@ public class BlockListActivity extends AppCompatActivity {
         }).start();
     }
 
+    void saveSelectedBlocks () {
+        new Thread(() -> {
+            ArrayList<BlockEntity> blockEntities = new ArrayList<>();
+            for (Block block: selectedBlocks.values()) {
+                blockEntities.add(new BlockEntity(block.getBlockHash(), block.getTimeStamp(), block.json_data.toString()));
+            }
+            BlocksDB.run().insert(blockEntities.toArray(new BlockEntity[blockEntities.size()]));
+            mHandler.sendEmptyMessage(COMPLETE_SAVE_BLOCKS);
+        }).start();
+    }
+
     void setSelectMode (boolean on) {
         if (selectable == on) return;
         if (on) {
             selectable = true;
             loadSavedBlock();
         } else {
-            selectable = true;
+            selectable = false;
             savedBlocks.clear();
             selectedBlocks.clear();
+            toolbar.getMenu().findItem(R.id.btn_save_blocks).setVisible(false);
+            toolbar.getMenu().findItem(R.id.btn_save_blocks).setEnabled(false);
             mBlockListAdpater.notifyDataSetChanged();
         }
     }
@@ -243,10 +262,31 @@ public class BlockListActivity extends AppCompatActivity {
                     break;
                 case COMPLETE_LOAD_SAVED_BLOCKS:
                     mBlockListAdpater.notifyDataSetChanged();
+                    toolbar.getMenu().findItem(R.id.btn_save_blocks).setVisible(true);
+                    toolbar.getMenu().findItem(R.id.btn_save_blocks).setEnabled(true);
+                    break;
+                case COMPLETE_SAVE_BLOCKS:
+                    setSelectMode(false);
                     break;
             }
         }
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.on_select_blocks, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btn_save_blocks:
+                saveSelectedBlocks();
+                return true;
+        }
+        return false;
+    }
 
     @Override
     public void onBackPressed() {
