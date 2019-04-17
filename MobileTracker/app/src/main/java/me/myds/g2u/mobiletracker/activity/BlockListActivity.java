@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ import me.myds.g2u.mobiletracker.IconRPC.rpcRequestException;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponse;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponseException;
 import me.myds.g2u.mobiletracker.R;
-import me.myds.g2u.mobiletracker.db.LocalBlocks;
+import me.myds.g2u.mobiletracker.db.BlocksDB;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
 
@@ -54,7 +54,7 @@ public class BlockListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_block_list);
 
-        LocalBlocks.init(this);
+        BlocksDB.init(this);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

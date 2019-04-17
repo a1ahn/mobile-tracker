@@ -1,20 +1,21 @@
 package me.myds.g2u.mobiletracker.db;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
-@Entity(primaryKeys = "block_hash", indices = @Index("block_hash"))
+@Entity
 public class BlockEntity {
 
-    private String block_hash;
-    public String getBlock_hash() { return block_hash; }
-    public void setBlock_hash(String block_hash) { this.block_hash = block_hash; }
+    @PrimaryKey
+    @NonNull
+    public final String block_hash;
+    public final long time_stamp;
+    public final String body;
 
-    long time_stamp;
-    public long getTime_stamp() { return time_stamp; }
-    public void setTime_stamp(long time_stamp) { this.time_stamp = time_stamp; }
-
-    String body;
-    public String getBody() { return body; }
-    public void setBody(String body) { this.body = body; }
+    public BlockEntity(String block_hash, long time_stamp, String body) {
+        this.block_hash = block_hash;
+        this.time_stamp = time_stamp;
+        this.body = body;
+    }
 }
