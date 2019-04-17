@@ -1,10 +1,10 @@
-package me.myds.g2u.mobiletracker.IconRPC;
+package me.myds.g2u.mobiletracker.exception;
 
-public class rpcRequestException extends Exception {
+public class rpcResponseException extends Exception {
     public int code;
     public String message;
 
-    public rpcRequestException(int code, String message) {
+    public rpcResponseException(int code, String message) {
         super();
         this.code = code;
         this.message = message;

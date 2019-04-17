@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker.IconRPC;
+package me.myds.g2u.mobiletracker.icon_rpc;
 
 import androidx.annotation.NonNull;
 

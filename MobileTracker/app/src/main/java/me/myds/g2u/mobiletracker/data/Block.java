@@ -1,6 +1,4 @@
-package me.myds.g2u.mobiletracker.IconRPC;
-
-import android.util.Log;
+package me.myds.g2u.mobiletracker.data;
 
 import org.json.JSONArray;
 import org.json.JSONException;

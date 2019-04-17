@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -30,18 +29,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import me.myds.g2u.mobiletracker.IconRPC.Block;
-import me.myds.g2u.mobiletracker.IconRPC.Transaction;
-import me.myds.g2u.mobiletracker.IconRPC.rpcConnection;
-import me.myds.g2u.mobiletracker.IconRPC.rpcRequest;
-import me.myds.g2u.mobiletracker.IconRPC.rpcRequestException;
-import me.myds.g2u.mobiletracker.IconRPC.rpcResponse;
-import me.myds.g2u.mobiletracker.IconRPC.rpcResponseException;
+import me.myds.g2u.mobiletracker.data.Block;
+import me.myds.g2u.mobiletracker.data.Transaction;
+import me.myds.g2u.mobiletracker.icon_rpc.rpcConnection;
+import me.myds.g2u.mobiletracker.icon_rpc.rpcRequest;
+import me.myds.g2u.mobiletracker.exception.rpcRequestException;
+import me.myds.g2u.mobiletracker.icon_rpc.rpcResponse;
+import me.myds.g2u.mobiletracker.exception.rpcResponseException;
 import me.myds.g2u.mobiletracker.R;
 import me.myds.g2u.mobiletracker.db.BlockEntity;
 import me.myds.g2u.mobiletracker.db.BlocksDB;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
-import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
+import me.myds.g2u.mobiletracker.viewholder.BlockViewHolder;
 
 public class BlockListActivity extends AppCompatActivity {
 

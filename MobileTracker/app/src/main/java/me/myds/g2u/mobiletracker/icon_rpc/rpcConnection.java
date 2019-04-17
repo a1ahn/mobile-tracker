@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker.IconRPC;
+package me.myds.g2u.mobiletracker.icon_rpc;
 
 import android.util.Log;
 
@@ -16,6 +16,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import me.myds.g2u.mobiletracker.exception.rpcRequestException;
+import me.myds.g2u.mobiletracker.exception.rpcResponseException;
 
 public class rpcConnection {
     private static String TAG = "rpcConnection";

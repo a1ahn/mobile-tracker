@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import me.myds.g2u.mobiletracker.IconRPC.Transaction;
+import me.myds.g2u.mobiletracker.data.Transaction;
 import me.myds.g2u.mobiletracker.R;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
-import me.myds.g2u.mobiletracker.utill.TransactionViewHolder;
+import me.myds.g2u.mobiletracker.viewholder.TransactionViewHolder;
 
 public class BlockDetailActivity extends AppCompatActivity {
     public static final String PARAM_TRANSACTION_LIST = "transaction list";

@@ -13,13 +13,13 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import me.myds.g2u.mobiletracker.IconRPC.Transaction;
-import me.myds.g2u.mobiletracker.IconRPC.TransactionResult;
-import me.myds.g2u.mobiletracker.IconRPC.rpcConnection;
-import me.myds.g2u.mobiletracker.IconRPC.rpcRequest;
-import me.myds.g2u.mobiletracker.IconRPC.rpcRequestException;
-import me.myds.g2u.mobiletracker.IconRPC.rpcResponse;
-import me.myds.g2u.mobiletracker.IconRPC.rpcResponseException;
+import me.myds.g2u.mobiletracker.data.Transaction;
+import me.myds.g2u.mobiletracker.data.TransactionResult;
+import me.myds.g2u.mobiletracker.icon_rpc.rpcConnection;
+import me.myds.g2u.mobiletracker.icon_rpc.rpcRequest;
+import me.myds.g2u.mobiletracker.exception.rpcRequestException;
+import me.myds.g2u.mobiletracker.icon_rpc.rpcResponse;
+import me.myds.g2u.mobiletracker.exception.rpcResponseException;
 import me.myds.g2u.mobiletracker.R;
 
 public class TransactionResultActivity extends AppCompatActivity {

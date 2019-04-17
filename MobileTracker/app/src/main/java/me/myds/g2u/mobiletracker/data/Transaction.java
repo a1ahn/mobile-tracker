@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker.IconRPC;
+package me.myds.g2u.mobiletracker.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

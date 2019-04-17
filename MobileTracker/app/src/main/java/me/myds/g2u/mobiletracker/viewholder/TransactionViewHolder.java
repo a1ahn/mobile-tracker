@@ -1,11 +1,11 @@
-package me.myds.g2u.mobiletracker.utill;
+package me.myds.g2u.mobiletracker.viewholder;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import me.myds.g2u.mobiletracker.IconRPC.Transaction;
+import me.myds.g2u.mobiletracker.data.Transaction;
 import me.myds.g2u.mobiletracker.R;
 
 public class TransactionViewHolder extends RecyclerView.ViewHolder {

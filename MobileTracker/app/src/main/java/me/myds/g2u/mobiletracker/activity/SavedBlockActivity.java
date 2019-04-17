@@ -15,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.myds.g2u.mobiletracker.IconRPC.Block;
-import me.myds.g2u.mobiletracker.IconRPC.Transaction;
+import me.myds.g2u.mobiletracker.data.Block;
+import me.myds.g2u.mobiletracker.data.Transaction;
 import me.myds.g2u.mobiletracker.R;
 import me.myds.g2u.mobiletracker.db.BlockEntity;
 import me.myds.g2u.mobiletracker.db.BlocksDB;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
-import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
+import me.myds.g2u.mobiletracker.viewholder.BlockViewHolder;
 
 public class SavedBlockActivity extends AppCompatActivity {
 
