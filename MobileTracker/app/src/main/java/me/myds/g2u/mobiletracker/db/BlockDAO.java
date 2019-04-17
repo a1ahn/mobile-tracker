@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker.block_db;
+package me.myds.g2u.mobiletracker.db;
 
 import java.util.List;
 
@@ -11,11 +11,11 @@ import androidx.room.Query;
 public interface BlockDAO {
 
     @Query("SELECT * FROM BlockEntity ORDER BY time_stamp DESC")
-    List<BlockEntity> getAll();
+    List<BlockEntity> list();
 
     @Insert
-    void insertAll(BlockEntity ...blockEntities);
+    void insert(BlockEntity ...blockEntities);
 
     @Delete
-    void deleteAll(BlockEntity ...blockEntities);
+    void delete(BlockEntity ...blockEntities);
 }

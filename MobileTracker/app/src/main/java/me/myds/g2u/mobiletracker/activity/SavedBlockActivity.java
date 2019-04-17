@@ -1,12 +1,16 @@
 package me.myds.g2u.mobiletracker.activity;
 
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Handler;
+import android.os.Message;
 import android.widget.TextView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +18,14 @@ import java.util.List;
 import me.myds.g2u.mobiletracker.IconRPC.Block;
 import me.myds.g2u.mobiletracker.IconRPC.Transaction;
 import me.myds.g2u.mobiletracker.R;
-import me.myds.g2u.mobiletracker.block_db.BlockEntity;
-import me.myds.g2u.mobiletracker.block_db.LocalBlocks;
+import me.myds.g2u.mobiletracker.db.BlockEntity;
+import me.myds.g2u.mobiletracker.db.BlocksDB;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
 
 public class SavedBlockActivity extends AppCompatActivity {
+
+    private static final int COMPLETE_LOAD_BLOCKS = 22;
 
     private TextView txtIndicate;
     private RecyclerView mBlockListView;
@@ -30,6 +36,9 @@ public class SavedBlockActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_block);
+
+        txtIndicate = findViewById(R.id.txtIndicate);
+        txtIndicate.setText("0 block loaded");
 
         mBlockListView = findViewById(R.id.block_list);
         mLayoutMgr = new LinearLayoutManager(this);
@@ -52,13 +61,33 @@ public class SavedBlockActivity extends AppCompatActivity {
                 holder.bindData(data);
             }
         };
-        List<BlockEntity> blockEntities = LocalBlocks.run().getAll();
-        mBlockListAdpater.dataList.addAll(new ArrayList<Block>(){{
-            for (BlockEntity entity : blockEntities) {
-                add(new Block(entity.getBody()));
-            }
-        }});
+
         mBlockListView.setLayoutManager(mLayoutMgr);
         mBlockListView.setAdapter(mBlockListAdpater);
+
+        loadBlock();
     }
+
+    void loadBlock() {
+        new Thread(()->{
+            List<BlockEntity> blockEntities = BlocksDB.run().list();
+            mBlockListAdpater.dataList.addAll(new ArrayList<Block>(){{
+                for (BlockEntity entity : blockEntities) {
+                    add(new Block(entity.body));
+                }
+            }});
+        }).start();
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(@NotNull Message msg) {
+            if(msg.what == COMPLETE_LOAD_BLOCKS) {
+                int successLoadCount = msg.arg1;
+                int length = mBlockListAdpater.dataList.size();
+                txtIndicate.setText(length + " block loaded");
+                mBlockListAdpater.notifyDataSetChanged();
+            }
+        }
+    };
 }

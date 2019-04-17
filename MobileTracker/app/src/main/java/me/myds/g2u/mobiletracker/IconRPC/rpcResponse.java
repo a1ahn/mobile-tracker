@@ -1,6 +1,6 @@
 package me.myds.g2u.mobiletracker.IconRPC;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.json.JSONException;
 import org.json.JSONObject;
