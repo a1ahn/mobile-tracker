@@ -13,6 +13,9 @@ public interface BlockDAO {
     @Query("SELECT * FROM BlockEntity ORDER BY time_stamp DESC")
     List<BlockEntity> list();
 
+    @Query("SELECT * FROM BlockEntity WHERE block_hash IN (:hashes)")
+    List<BlockEntity> list(String ...hashes);
+
     @Insert
     void insert(BlockEntity ...blockEntities);
 

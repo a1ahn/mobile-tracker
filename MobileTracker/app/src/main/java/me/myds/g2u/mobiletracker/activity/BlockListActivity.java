@@ -1,6 +1,7 @@
 package me.myds.g2u.mobiletracker.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 import me.myds.g2u.mobiletracker.IconRPC.Block;
 import me.myds.g2u.mobiletracker.IconRPC.Transaction;
@@ -29,6 +33,7 @@ import me.myds.g2u.mobiletracker.IconRPC.rpcRequestException;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponse;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponseException;
 import me.myds.g2u.mobiletracker.R;
+import me.myds.g2u.mobiletracker.db.BlockEntity;
 import me.myds.g2u.mobiletracker.db.BlocksDB;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
@@ -37,6 +42,7 @@ public class BlockListActivity extends AppCompatActivity {
 
     private static final String TAG = "BlockListActivity";
     private static final int COMPLETE_LOAD_BLOCKS = 22;
+    private static final int COMPLETE_LOAD_SAVED_BLOCKS = 33;
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -49,6 +55,10 @@ public class BlockListActivity extends AppCompatActivity {
     private LinearLayoutManager mLayoutMgr;
     private BaseRecyclerAdapter<Block, BlockViewHolder> mBlockListAdpater;
 
+    private boolean selectable = false;
+    private HashSet<String> savedBlocks = new HashSet<>();
+    private HashSet<String> selectedBlocks = new HashSet<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +68,6 @@ public class BlockListActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         drawer = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -95,18 +104,51 @@ public class BlockListActivity extends AppCompatActivity {
                 holder.itemView.setOnClickListener((v)->{
                     int itemPosition = holder.getLayoutPosition();
                     Block block = mBlockListAdpater.dataList.get(itemPosition);
-                    ArrayList<Transaction> transactions = block.getConfirmedTransactionList();
-                    Intent intent = new Intent(BlockListActivity.this, BlockDetailActivity.class);
-                    intent.putParcelableArrayListExtra(BlockDetailActivity.PARAM_TRANSACTION_LIST, transactions);
-                    startActivity(intent);
+
+                    if (!   selectable) {
+                        ArrayList<Transaction> transactions = block.getConfirmedTransactionList();
+                        Intent intent = new Intent(BlockListActivity.this, BlockDetailActivity.class);
+                        intent.putParcelableArrayListExtra(BlockDetailActivity.PARAM_TRANSACTION_LIST, transactions);
+                        startActivity(intent);
+                    } else {
+                        String block_hash = block.getBlockHash();
+                        if (!savedBlocks.contains(block_hash)){
+                            if (selectedBlocks.contains(block_hash)) {
+                                selectedBlocks.remove(block_hash);
+                            } else {
+                                selectedBlocks.add(block_hash);
+                            }
+                            mBlockListAdpater.notifyItemChanged(itemPosition);
+                        }
+                    }
+                });
+                holder.itemView.setOnLongClickListener(v -> {
+                    if (!selectable) {
+                        int itemPosition = holder.getLayoutPosition();
+                        Block block = mBlockListAdpater.dataList.get(itemPosition);
+                        selectedBlocks.add(block.getBlockHash());
+                        setSelectMode(true);
+                        return true;
+                    }
+                    return false;
                 });
             }
 
             @Override
             public void dataConvertViewHolder(BlockViewHolder holder, Block data) {
                 holder.bindData(data);
+                boolean saved = savedBlocks.contains(data.getBlockHash());
+                boolean selected = selectedBlocks.contains(data.getBlockHash());
+                if (!selectable) holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                else {
+                    if (saved) holder.itemView.setBackgroundColor(Color.LTGRAY);
+                    else if (selected) holder.itemView.setBackgroundColor(Color.GREEN);
+                    else holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                }
+
             }
         };
+
         mBlockListView.setLayoutManager(mLayoutMgr);
         mBlockListView.setAdapter(mBlockListAdpater);
 
@@ -146,7 +188,6 @@ public class BlockListActivity extends AppCompatActivity {
                     prevBlockHash = block.getPrevBlockHash();
                     mBlockListAdpater.dataList.add(block);
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (rpcRequestException e) {
@@ -162,15 +203,47 @@ public class BlockListActivity extends AppCompatActivity {
         }).start();
     }
 
+    void loadSavedBlock () {
+        new Thread(() -> {
+            HashSet<String> hashes = new HashSet<>();
+            for (Block block : mBlockListAdpater.dataList) {
+                hashes.add(block.getBlockHash());
+            }
+            List<BlockEntity> list = BlocksDB.run().list(hashes.toArray(new String[hashes.size()]));
+            for (BlockEntity blockEntity : list) {
+                savedBlocks.add(blockEntity.block_hash);
+            }
+            mHandler.sendEmptyMessage(COMPLETE_LOAD_SAVED_BLOCKS);
+        }).start();
+    }
+
+    void setSelectMode (boolean on) {
+        if (selectable == on) return;
+        if (on) {
+            selectable = true;
+            loadSavedBlock();
+        } else {
+            selectable = true;
+            savedBlocks.clear();
+            selectedBlocks.clear();
+            mBlockListAdpater.notifyDataSetChanged();
+        }
+    }
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NotNull Message msg) {
-            if(msg.what == COMPLETE_LOAD_BLOCKS) {
-                int successLoadCount = msg.arg1;
-                int length = mBlockListAdpater.dataList.size();
-                mSwipe.setRefreshing(false);
-                txtIndicate.setText(length + " block loaded");
-                mBlockListAdpater.notifyItemRangeInserted(length, successLoadCount);
+            switch (msg.what) {
+                case COMPLETE_LOAD_BLOCKS:
+                    int successLoadCount = msg.arg1;
+                    int length = mBlockListAdpater.dataList.size();
+                    mSwipe.setRefreshing(false);
+                    txtIndicate.setText(length + " block loaded");
+                    mBlockListAdpater.notifyItemRangeInserted(length, successLoadCount);
+                    break;
+                case COMPLETE_LOAD_SAVED_BLOCKS:
+                    mBlockListAdpater.notifyDataSetChanged();
+                    break;
             }
         }
     };
@@ -179,6 +252,8 @@ public class BlockListActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        }else if (selectable) {
+          setSelectMode(false);
         } else {
             super.onBackPressed();
         }

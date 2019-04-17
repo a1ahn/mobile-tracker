@@ -20,6 +20,16 @@ public class Block {
         }
     }
 
+    public String getBlockHash() {
+        String block_hash = null;
+        try {
+            block_hash = this.json_data.getString("block_hash");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return block_hash;
+    }
+
     public String getPrevBlockHash() {
         String prev_block_hash = null;
         try {
