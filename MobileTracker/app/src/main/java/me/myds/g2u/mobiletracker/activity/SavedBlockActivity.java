@@ -1,7 +1,6 @@
 package me.myds.g2u.mobiletracker.activity;
 
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +13,8 @@ import java.util.List;
 import me.myds.g2u.mobiletracker.IconRPC.Block;
 import me.myds.g2u.mobiletracker.IconRPC.Transaction;
 import me.myds.g2u.mobiletracker.R;
-import me.myds.g2u.mobiletracker.block_db.BlockEntity;
-import me.myds.g2u.mobiletracker.block_db.LocalBlocks;
+import me.myds.g2u.mobiletracker.db.BlockEntity;
+import me.myds.g2u.mobiletracker.db.LocalBlocks;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
 

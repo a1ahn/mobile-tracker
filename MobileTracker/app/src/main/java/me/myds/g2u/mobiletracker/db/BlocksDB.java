@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker.block_db;
+package me.myds.g2u.mobiletracker.db;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

@@ -29,7 +29,7 @@ import me.myds.g2u.mobiletracker.IconRPC.rpcRequestException;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponse;
 import me.myds.g2u.mobiletracker.IconRPC.rpcResponseException;
 import me.myds.g2u.mobiletracker.R;
-import me.myds.g2u.mobiletracker.block_db.LocalBlocks;
+import me.myds.g2u.mobiletracker.db.LocalBlocks;
 import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.utill.BlockViewHolder;
 
@@ -109,6 +109,8 @@ public class BlockListActivity extends AppCompatActivity {
         };
         mBlockListView.setLayoutManager(mLayoutMgr);
         mBlockListView.setAdapter(mBlockListAdpater);
+
+        loadBlock(10);
     }
 
     void loadBlock(int count) {

@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker.block_db;
+package me.myds.g2u.mobiletracker.db;
 
 import android.content.Context;
 

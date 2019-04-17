@@ -1,9 +1,9 @@
-package me.myds.g2u.mobiletracker.block_db;
+package me.myds.g2u.mobiletracker.db;
 
 import androidx.room.Entity;
 import androidx.room.Index;
 
-@Entity(primaryKeys = {"block_hash", "time_stamp"}, indices = @Index("block_hash"))
+@Entity(primaryKeys = "block_hash", indices = @Index("block_hash"))
 public class BlockEntity {
 
     private String block_hash;
