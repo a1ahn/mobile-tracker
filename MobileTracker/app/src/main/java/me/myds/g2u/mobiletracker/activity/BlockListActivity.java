@@ -63,9 +63,11 @@ public class BlockListActivity extends AppCompatActivity {
             if (selectable) {
                 toolbar.getMenu().findItem(R.id.btn_save_blocks).setVisible(true);
                 toolbar.getMenu().findItem(R.id.btn_save_blocks).setEnabled(true);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             } else {
                 toolbar.getMenu().findItem(R.id.btn_save_blocks).setVisible(false);
                 toolbar.getMenu().findItem(R.id.btn_save_blocks).setEnabled(false);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             }
         });
         fragmentManager = getSupportFragmentManager();

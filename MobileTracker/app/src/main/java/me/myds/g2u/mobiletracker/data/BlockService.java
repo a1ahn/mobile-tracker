@@ -21,7 +21,7 @@ import me.myds.g2u.mobiletracker.icon_rpc.rpcConnection;
 import me.myds.g2u.mobiletracker.icon_rpc.rpcRequest;
 import me.myds.g2u.mobiletracker.icon_rpc.rpcResponse;
 
-public class BlockExchanger {
+public class BlockService {
     private static final int COMPLETE_LOAD_BLOCKS = 22;
     private static final int COMPLETE_LOAD_SAVED_BLOCKS = 33;
     private static final int COMPLETE_SAVE_BLOCKS = 44;
@@ -105,15 +105,15 @@ public class BlockExchanger {
         @Override
         public void handleMessage(@NotNull Message msg) {
             switch (msg.what) {
-                case BlockExchanger.COMPLETE_LOAD_BLOCKS:
+                case BlockService.COMPLETE_LOAD_BLOCKS:
                     if (onLoadRemoteBlocks != null)
                         onLoadRemoteBlocks.onLoad((List<Block>) msg.obj);
                     break;
-                case BlockExchanger.COMPLETE_LOAD_SAVED_BLOCKS:
+                case BlockService.COMPLETE_LOAD_SAVED_BLOCKS:
                     if (onLoadLocalBlocks != null)
                         onLoadLocalBlocks.onLoad((List<Block>) msg.obj);
                     break;
-                case BlockExchanger.COMPLETE_SAVE_BLOCKS:
+                case BlockService.COMPLETE_SAVE_BLOCKS:
                     if (onSaveLocalBlocks != null)
                         onSaveLocalBlocks.onSave();
                     break;

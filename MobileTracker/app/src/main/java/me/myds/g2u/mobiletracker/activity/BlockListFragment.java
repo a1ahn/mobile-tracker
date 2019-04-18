@@ -10,36 +10,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import me.myds.g2u.mobiletracker.LoadingDialog;
 import me.myds.g2u.mobiletracker.R;
-import me.myds.g2u.mobiletracker.activity.BlockDetailActivity;
 import me.myds.g2u.mobiletracker.adapter.MultiSelectableAdpater;
 import me.myds.g2u.mobiletracker.data.Block;
-import me.myds.g2u.mobiletracker.data.BlockExchanger;
+import me.myds.g2u.mobiletracker.data.BlockService;
 import me.myds.g2u.mobiletracker.data.Transaction;
-import me.myds.g2u.mobiletracker.db.BlockEntity;
-import me.myds.g2u.mobiletracker.db.BlocksDB;
-import me.myds.g2u.mobiletracker.exception.rpcRequestException;
-import me.myds.g2u.mobiletracker.exception.rpcResponseException;
-import me.myds.g2u.mobiletracker.icon_rpc.rpcConnection;
-import me.myds.g2u.mobiletracker.icon_rpc.rpcRequest;
-import me.myds.g2u.mobiletracker.icon_rpc.rpcResponse;
 import me.myds.g2u.mobiletracker.viewholder.BlockViewHolder;
 
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class BlockListFragment extends Fragment {
 
@@ -51,7 +33,7 @@ public class BlockListFragment extends Fragment {
     private LinearLayoutManager mLayoutMgr;
     public MultiSelectableAdpater<Block, BlockViewHolder> mAdpater;
 
-    public BlockExchanger exchanger;
+    public BlockService exchanger;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -128,7 +110,7 @@ public class BlockListFragment extends Fragment {
 
         LoadingDialog loadingDialog = new LoadingDialog(getContext());
         loadingDialog.show();
-        exchanger = new BlockExchanger();
+        exchanger = new BlockService();
         exchanger.setOnLoadRemoteBlocks(blocks -> {
             mAdpater.list.addAll(blocks);
             int length = mAdpater.list.size();

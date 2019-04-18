@@ -23,13 +23,16 @@ public class HashImage extends View {
     }
 
     public void setHashString(String hashString) {
+        if (hashString.length() < 9 * 6) {
+            hashString += new String(new char[9 * 6 - hashString.length()]).replace("\0", "0");
+        }
         this.hashString = hashString.substring(0, 9 * 6);
         invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (hashString == null || hashString.length() < 9 * 6) return;
+        if (hashString == null) return;
 
         int h = canvas.getHeight() / 3;
         int w = canvas.getWidth() / 3;
