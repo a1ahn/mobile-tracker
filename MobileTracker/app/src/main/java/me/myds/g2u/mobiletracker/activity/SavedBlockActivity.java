@@ -20,7 +20,7 @@ import me.myds.g2u.mobiletracker.data.Transaction;
 import me.myds.g2u.mobiletracker.R;
 import me.myds.g2u.mobiletracker.db.BlockEntity;
 import me.myds.g2u.mobiletracker.db.BlocksDB;
-import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
+import me.myds.g2u.mobiletracker.adapter.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.viewholder.BlockViewHolder;
 
 public class SavedBlockActivity extends AppCompatActivity {
@@ -48,7 +48,7 @@ public class SavedBlockActivity extends AppCompatActivity {
             public void onCreateAfterViewHolder(BlockViewHolder holder) {
                 holder.itemView.setOnClickListener((v)->{
                     int itemPosition = holder.getLayoutPosition();
-                    Block block = mBlockListAdpater.dataList.get(itemPosition);
+                    Block block = mBlockListAdpater.list.get(itemPosition);
                     ArrayList<Transaction> transactions = block.getConfirmedTransactionList();
                     Intent intent = new Intent(SavedBlockActivity.this, BlockDetailActivity.class);
                     intent.putParcelableArrayListExtra(BlockDetailActivity.PARAM_TRANSACTION_LIST, transactions);
@@ -71,7 +71,7 @@ public class SavedBlockActivity extends AppCompatActivity {
     void loadBlock() {
         new Thread(()->{
             List<BlockEntity> blockEntities = BlocksDB.run().list();
-            mBlockListAdpater.dataList.addAll(new ArrayList<Block>(){{
+            mBlockListAdpater.list.addAll(new ArrayList<Block>(){{
                 for (BlockEntity entity : blockEntities) {
                     add(new Block(entity.body));
                 }
@@ -84,7 +84,7 @@ public class SavedBlockActivity extends AppCompatActivity {
         @Override
         public void handleMessage(@NotNull Message msg) {
             if(msg.what == COMPLETE_LOAD_BLOCKS) {
-                int length = mBlockListAdpater.dataList.size();
+                int length = mBlockListAdpater.list.size();
                 txtIndicate.setText(length + " block saved");
                 mBlockListAdpater.notifyDataSetChanged();
             }

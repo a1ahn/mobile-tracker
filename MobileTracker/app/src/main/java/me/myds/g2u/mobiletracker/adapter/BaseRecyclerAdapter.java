@@ -1,4 +1,4 @@
-package me.myds.g2u.mobiletracker.utill;
+package me.myds.g2u.mobiletracker.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 
 abstract public class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>{
 
     @NonNull
-    public ArrayList<T> dataList = new ArrayList<>();
+    public List<T> list = new ArrayList<>();
+
     protected int mModelLayout;
     Class<VH> mViewHolderClass;
 
@@ -45,12 +47,12 @@ abstract public class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
-        dataConvertViewHolder(holder,dataList.get(position));
+        dataConvertViewHolder(holder, list.get(position));
     }
 
     abstract public void dataConvertViewHolder(VH holder, T data);
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return list.size();
     }
 }

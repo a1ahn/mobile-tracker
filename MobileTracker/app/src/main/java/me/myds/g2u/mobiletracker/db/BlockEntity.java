@@ -3,6 +3,7 @@ package me.myds.g2u.mobiletracker.db;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import me.myds.g2u.mobiletracker.data.Block;
 
 @Entity
 public class BlockEntity {
@@ -17,5 +18,9 @@ public class BlockEntity {
         this.block_hash = block_hash;
         this.time_stamp = time_stamp;
         this.body = body;
+    }
+
+    public BlockEntity(Block block) {
+        this(block.getBlockHash(), block.getTimeStamp(), block.json_data.toString());
     }
 }
