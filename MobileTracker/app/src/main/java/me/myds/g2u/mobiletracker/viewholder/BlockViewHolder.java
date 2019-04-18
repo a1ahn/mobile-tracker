@@ -2,15 +2,22 @@ package me.myds.g2u.mobiletracker.viewholder;
 
 import androidx.annotation.NonNull;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import me.myds.g2u.mobiletracker.HashImage;
 import me.myds.g2u.mobiletracker.data.Block;
 import me.myds.g2u.mobiletracker.R;
 
 public class BlockViewHolder extends BaseRecyclerViewHolder<Block> {
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd hh:mm");
 
     public TextView txtBlockHash;
     public HashImage hashImage;
@@ -29,23 +36,18 @@ public class BlockViewHolder extends BaseRecyclerViewHolder<Block> {
     public void bindData(Block block) {
         txtBlockHash.setText(block.getPrevBlockHash());
         hashImage.setHashString(block.getPrevBlockHash());
-
-//        long unixTime = System.currentTimeMillis();
-//        Log.e("block", "" +block.getTimeStamp() );
-//        Log.e("cuurn", "" + unixTime);
-//        long min = (new Date().getTime() - (block.getTimeStamp() / 1000)) / 6;
-////        long min = diff / 60000;
-////        long hour = min / 60;
-////        min -= hour * 60;
-//
-        long unixTime = System.currentTimeMillis();
-        long timestamp = block.getTimeStamp();
-
-
-        txtTime.setText("");
+        txtTime.setText(dateFormat.format(new Date(block.getTimeStamp() / 1000L)));
     }
 
     public void setSaved(boolean save) {
         is_saved.setVisibility(save ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    public void setSelect(boolean select) {
+
+    }
+
+    public void setDisable(boolean disable) {
+
     }
 }

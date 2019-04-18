@@ -37,7 +37,7 @@ abstract public class MultiSelectableAdpater<T, VH extends RecyclerView.ViewHold
         if (selectable) {
 
         } else {
-            disabled = new HashSet<>();
+//            disabled = new HashSet<>();
             selected = new HashSet<>();
         }
         if (changeSelectableListener != null)
@@ -59,9 +59,10 @@ abstract public class MultiSelectableAdpater<T, VH extends RecyclerView.ViewHold
             selected.add(list.get(position));
         } else {
             if (selected.contains(list.get(position)))
-                selected.remove(position);
+                selected.remove(list.get(position));
         }
     }
+
 
     public void setSelect (T select) {
         selected.add(select);

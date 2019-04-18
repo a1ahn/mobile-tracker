@@ -38,7 +38,7 @@ public class BlockListActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setTitle("Mobile Tracker");
 
         drawer = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -87,7 +87,7 @@ public class BlockListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btn_save_blocks:
-                blockListView.exchanger.saveSelectedBlocks(blockListView.mAdpater.selected);
+                blockListView.saveSelected();
                 return true;
         }
         return false;

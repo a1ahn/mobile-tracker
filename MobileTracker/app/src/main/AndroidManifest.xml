@@ -23,8 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.TransactionResultActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".activity.TransactionResultActivity"/>
         <activity android:name=".activity.BlockDetailActivity" />
     </application>
 

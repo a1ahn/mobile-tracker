@@ -49,8 +49,7 @@ public class TransactionResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_result);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Transaction");
 
         Intent intent = getIntent();
         transaction = intent.getParcelableExtra(PARAM_TRANSACTION);

@@ -37,8 +37,10 @@ public class SavedBlockActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_block);
 
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setIcon(R.drawable.ic_inbox_black_24dp);
+        getSupportActionBar().setTitle("  Inbox");
+        getSupportActionBar().setLogo(R.drawable.ic_inbox_black_24dp);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         txtIndicate = findViewById(R.id.txtIndicate);
         txtIndicate.setText("0 block loaded");
@@ -55,6 +57,7 @@ public class SavedBlockActivity extends AppCompatActivity {
                     ArrayList<Transaction> transactions = block.getConfirmedTransactionList();
                     Intent intent = new Intent(SavedBlockActivity.this, BlockDetailActivity.class);
                     intent.putParcelableArrayListExtra(BlockDetailActivity.PARAM_TRANSACTION_LIST, transactions);
+                    intent.putExtra("block", block.json_data.toString());
                     startActivity(intent);
                 });
             }

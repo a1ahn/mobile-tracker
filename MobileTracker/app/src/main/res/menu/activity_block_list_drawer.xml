@@ -6,6 +6,6 @@
     <item
         android:id="@+id/nav_saved_blocks"
         android:icon="@drawable/ic_inbox_black_24dp"
-        android:title="Saved Blocks" />
+        android:title="Inbox" />
 
 </menu>
