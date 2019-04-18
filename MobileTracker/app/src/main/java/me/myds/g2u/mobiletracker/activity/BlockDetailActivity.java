@@ -40,12 +40,13 @@ public class BlockDetailActivity extends AppCompatActivity {
         ) {
             @Override
             public void onCreateAfterViewHolder(TransactionViewHolder holder) {
-                holder.itemView.setOnClickListener((v)->{
+                holder.cardView.setOnClickListener((v)->{
                     int itemPosition = holder.getLayoutPosition();
                     Transaction transaction = mTransactionListAdpater.list.get(itemPosition);
                     Intent intent = new Intent(BlockDetailActivity.this, TransactionResultActivity.class);
                     intent.putExtra(TransactionResultActivity.PARAM_TRANSACTION, transaction);
                     startActivity(intent);
+//                    overridePendingTransition(R.anim.anim_slide_in_up, R.anim.anim_slide_out_down);
                 });
             }
 
