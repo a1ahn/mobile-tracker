@@ -2,6 +2,7 @@ package me.myds.g2u.mobiletracker.data;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -81,6 +82,7 @@ public class BlockExchanger {
             for (BlockEntity blockEntity : list) {
                 blocks.add(new Block(blockEntity.body));
             }
+            Log.e("load save", "" + blocks.size());
             Message msg = new Message();
             msg.what = COMPLETE_LOAD_SAVED_BLOCKS;
             msg.obj = blocks;

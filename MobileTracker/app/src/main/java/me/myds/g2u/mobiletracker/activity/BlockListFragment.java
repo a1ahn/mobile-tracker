@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import me.myds.g2u.mobiletracker.LoadingDialog;
 import me.myds.g2u.mobiletracker.R;
 import me.myds.g2u.mobiletracker.activity.BlockDetailActivity;
 import me.myds.g2u.mobiletracker.adapter.MultiSelectableAdpater;
@@ -25,6 +26,7 @@ import me.myds.g2u.mobiletracker.viewholder.BlockViewHolder;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,22 +63,6 @@ public class BlockListFragment extends Fragment {
         mSwipe = itemView.findViewById(R.id.swipe);
         mSwipe.setOnRefreshListener(() -> {
             exchanger.loadBlock(10, mAdpater.list.get(mAdpater.list.size()-1));
-        });
-
-        exchanger = new BlockExchanger();
-        exchanger.setOnLoadRemoteBlocks(blocks -> {
-            mAdpater.list.addAll(blocks);
-            int length = mAdpater.list.size();
-            mSwipe.setRefreshing(false);
-            mAdpater.notifyItemRangeInserted(length, blocks.size());
-            txtIndicate.setText(length + " block loaded");
-        });
-        exchanger.setOnLoadLocalBlocks(blocks -> {
-            mAdpater.setDisabled(blocks);
-            mAdpater.notifyDataSetChanged();
-        });
-        exchanger.setOnSaveLocalBlocks(() -> {
-            mAdpater.setSelectable(false);
         });
 
         mBlockListView = itemView.findViewById(R.id.block_list);
@@ -139,6 +125,25 @@ public class BlockListFragment extends Fragment {
         mBlockListView.setLayoutManager(mLayoutMgr);
         mBlockListView.setAdapter(mAdpater);
 
+
+        LoadingDialog loadingDialog = new LoadingDialog(getContext());
+        loadingDialog.show();
+        exchanger = new BlockExchanger();
+        exchanger.setOnLoadRemoteBlocks(blocks -> {
+            mAdpater.list.addAll(blocks);
+            int length = mAdpater.list.size();
+            mSwipe.setRefreshing(false);
+            loadingDialog.dismiss();
+            mAdpater.notifyItemRangeInserted(length, blocks.size());
+            txtIndicate.setText(length + " block loaded");
+        });
+        exchanger.setOnLoadLocalBlocks(blocks -> {
+            mAdpater.setDisabled(blocks);
+            mAdpater.notifyDataSetChanged();
+        });
+        exchanger.setOnSaveLocalBlocks(() -> {
+            mAdpater.setSelectable(false);
+        });
         exchanger.loadBlock(10, null);
 
         return itemView;

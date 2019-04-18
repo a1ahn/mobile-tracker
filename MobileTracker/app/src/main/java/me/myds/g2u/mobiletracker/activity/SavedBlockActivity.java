@@ -37,6 +37,9 @@ public class SavedBlockActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_block);
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setIcon(R.drawable.ic_inbox_black_24dp);
+
         txtIndicate = findViewById(R.id.txtIndicate);
         txtIndicate.setText("0 block loaded");
 

@@ -6,6 +6,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
+
 public class Block {
     public JSONObject json_data;
 
@@ -65,5 +67,18 @@ public class Block {
         }
 
         return transactions;
+    }
+
+    @Override
+    public int hashCode() {
+        return json_data.toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof Block) {
+            return json_data.toString().equals(((Block) obj).json_data.toString());
+        }
+        return super.equals(obj);
     }
 }

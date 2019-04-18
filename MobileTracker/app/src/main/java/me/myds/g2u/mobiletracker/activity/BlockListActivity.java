@@ -14,7 +14,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import androidx.fragment.app.FragmentTransaction;
 import me.myds.g2u.mobiletracker.R;
@@ -39,6 +38,7 @@ public class BlockListActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         drawer = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
