@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import me.myds.g2u.mobiletracker.data.Transaction;
 import me.myds.g2u.mobiletracker.R;
-import me.myds.g2u.mobiletracker.utill.BaseRecyclerAdapter;
+import me.myds.g2u.mobiletracker.adapter.BaseRecyclerAdapter;
 import me.myds.g2u.mobiletracker.viewholder.TransactionViewHolder;
 
 public class BlockDetailActivity extends AppCompatActivity {
@@ -42,7 +42,7 @@ public class BlockDetailActivity extends AppCompatActivity {
             public void onCreateAfterViewHolder(TransactionViewHolder holder) {
                 holder.itemView.setOnClickListener((v)->{
                     int itemPosition = holder.getLayoutPosition();
-                    Transaction transaction = mTransactionListAdpater.dataList.get(itemPosition);
+                    Transaction transaction = mTransactionListAdpater.list.get(itemPosition);
                     Intent intent = new Intent(BlockDetailActivity.this, TransactionResultActivity.class);
                     intent.putExtra(TransactionResultActivity.PARAM_TRANSACTION, transaction);
                     startActivity(intent);
@@ -51,10 +51,10 @@ public class BlockDetailActivity extends AppCompatActivity {
 
             @Override
             public void dataConvertViewHolder(TransactionViewHolder holder, Transaction data) {
-                holder.dataBind(data);
+                holder.bindData(data);
             }
         };
-        mTransactionListAdpater.dataList.addAll(transactions);
+        mTransactionListAdpater.list.addAll(transactions);
         mTransactionistView.setLayoutManager(mLayoutMgr);
         mTransactionistView.setAdapter(mTransactionListAdpater);
     }
