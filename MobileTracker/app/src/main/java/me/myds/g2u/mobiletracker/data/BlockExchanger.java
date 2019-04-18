@@ -3,6 +3,7 @@ package me.myds.g2u.mobiletracker.data;
 import android.os.Handler;
 import android.os.Message;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,15 +21,9 @@ import me.myds.g2u.mobiletracker.icon_rpc.rpcRequest;
 import me.myds.g2u.mobiletracker.icon_rpc.rpcResponse;
 
 public class BlockExchanger {
-    public static final int COMPLETE_LOAD_BLOCKS = 22;
-    public static final int COMPLETE_LOAD_SAVED_BLOCKS = 33;
-    public static final int COMPLETE_SAVE_BLOCKS = 44;
-
-    private Handler mHandler;
-
-    public BlockExchanger(Handler handler) {
-        this.mHandler = handler;
-    }
+    private static final int COMPLETE_LOAD_BLOCKS = 22;
+    private static final int COMPLETE_LOAD_SAVED_BLOCKS = 33;
+    private static final int COMPLETE_SAVE_BLOCKS = 44;
 
     public void loadBlock(int count, Block lastBlock) {
         new Thread(()->{
@@ -102,5 +97,53 @@ public class BlockExchanger {
             BlocksDB.run().insert(blockEntities.toArray(new BlockEntity[blockEntities.size()]));
             mHandler.sendEmptyMessage(COMPLETE_SAVE_BLOCKS);
         }).start();
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(@NotNull Message msg) {
+            switch (msg.what) {
+                case BlockExchanger.COMPLETE_LOAD_BLOCKS:
+                    if (onLoadRemoteBlocks != null)
+                        onLoadRemoteBlocks.onLoad((List<Block>) msg.obj);
+                    break;
+                case BlockExchanger.COMPLETE_LOAD_SAVED_BLOCKS:
+                    if (onLoadLocalBlocks != null)
+                        onLoadLocalBlocks.onLoad((List<Block>) msg.obj);
+                    break;
+                case BlockExchanger.COMPLETE_SAVE_BLOCKS:
+                    if (onSaveLocalBlocks != null)
+                        onSaveLocalBlocks.onSave();
+                    break;
+            }
+        }
+    };
+
+    public interface OnLoadRemoteBlocksListener {
+        void onLoad(List<Block> blocks);
+    }
+
+    public interface OnLoadLocalBlocksListener {
+        void onLoad(List<Block> blocks);
+    }
+
+    public interface OnSaveLocalBlocksListener {
+        void onSave();
+    }
+
+    private OnLoadRemoteBlocksListener onLoadRemoteBlocks;
+    private OnLoadLocalBlocksListener onLoadLocalBlocks;
+    private OnSaveLocalBlocksListener onSaveLocalBlocks;
+
+    public void setOnLoadLocalBlocks(OnLoadLocalBlocksListener onLoadLocalBlocks) {
+        this.onLoadLocalBlocks = onLoadLocalBlocks;
+    }
+
+    public void setOnLoadRemoteBlocks(OnLoadRemoteBlocksListener onLoadRemoteBlocks) {
+        this.onLoadRemoteBlocks = onLoadRemoteBlocks;
+    }
+
+    public void setOnSaveLocalBlocks(OnSaveLocalBlocksListener onSaveLocalBlocks) {
+        this.onSaveLocalBlocks = onSaveLocalBlocks;
     }
 }

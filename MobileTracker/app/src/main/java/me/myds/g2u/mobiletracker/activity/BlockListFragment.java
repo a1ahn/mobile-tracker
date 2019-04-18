@@ -55,14 +55,28 @@ public class BlockListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         itemView = inflater.inflate(R.layout.fragment_block_list, container, false);
 
-        exchanger = new BlockExchanger(mHandler);
-
         txtIndicate = itemView.findViewById(R.id.txtIndicate);
         txtIndicate.setText("0 block loaded");
 
         mSwipe = itemView.findViewById(R.id.swipe);
         mSwipe.setOnRefreshListener(() -> {
             exchanger.loadBlock(10, mAdpater.list.get(mAdpater.list.size()-1));
+        });
+
+        exchanger = new BlockExchanger();
+        exchanger.setOnLoadRemoteBlocks(blocks -> {
+            mAdpater.list.addAll(blocks);
+            int length = mAdpater.list.size();
+            mSwipe.setRefreshing(false);
+            mAdpater.notifyItemRangeInserted(length, blocks.size());
+            txtIndicate.setText(length + " block loaded");
+        });
+        exchanger.setOnLoadLocalBlocks(blocks -> {
+            mAdpater.setDisabled(blocks);
+            mAdpater.notifyDataSetChanged();
+        });
+        exchanger.setOnSaveLocalBlocks(() -> {
+            mAdpater.setSelectable(false);
         });
 
         mBlockListView = itemView.findViewById(R.id.block_list);
@@ -81,7 +95,7 @@ public class BlockListFragment extends Fragment {
                         startActivity(intent);
                     } else {
                         if (!mAdpater.isDisabled(block)) {
-                            mAdpater.setSelect(block);
+                            mAdpater.setSelect(holder.getLayoutPosition(), !mAdpater.isSelected(block));
                             mAdpater.notifyItemChanged(holder.getLayoutPosition());
                         }
                     }
@@ -115,7 +129,6 @@ public class BlockListFragment extends Fragment {
             if (selectable) {
                 exchanger.loadSavedBlock(mAdpater.list);
             } else {
-
                 mAdpater.notifyDataSetChanged();
             }
 
@@ -130,31 +143,6 @@ public class BlockListFragment extends Fragment {
 
         return itemView;
     }
-
-
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(@NotNull Message msg) {
-            switch (msg.what) {
-                case BlockExchanger.COMPLETE_LOAD_BLOCKS:
-                    List<Block> list = (List<Block>) msg.obj;
-                    int length = mAdpater.list.size();
-                    mAdpater.list.addAll(list);
-                    mSwipe.setRefreshing(false);
-                    mAdpater.notifyItemRangeInserted(length, list.size());
-                    txtIndicate.setText(length + " block loaded");
-                    break;
-                case BlockExchanger.COMPLETE_LOAD_SAVED_BLOCKS:
-
-                    mAdpater.setDisabled((List<Block>) msg.obj);
-                    mAdpater.notifyDataSetChanged();
-                    break;
-                case BlockExchanger.COMPLETE_SAVE_BLOCKS:
-                    mAdpater.setSelectable(false);
-                    break;
-            }
-        }
-    };
 
     private MultiSelectableAdpater.OnChangeSelectableListener changeSelectableListener;
     public void setOnChangeSelectableListener(MultiSelectableAdpater.OnChangeSelectableListener listener) {
