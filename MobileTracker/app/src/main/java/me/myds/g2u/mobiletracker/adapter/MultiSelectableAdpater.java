@@ -9,9 +9,15 @@ import androidx.recyclerview.widget.RecyclerView;
 abstract public class MultiSelectableAdpater<T, VH extends RecyclerView.ViewHolder> extends BaseRecyclerAdapter<T, VH>{
 
     private boolean selectable = false;
+
     public Set<T> disabled = new HashSet<>();
     public Set<T> selected = new HashSet<>();
+
     private OnChangeSelectableListener changeSelectableListener;
+
+    public interface OnChangeSelectableListener {
+        void onChanageSelectable (boolean selectable);
+    }
 
     public MultiSelectableAdpater(int modelLayout, Class<VH> viewHolderClass) {
         super(modelLayout, viewHolderClass);
@@ -39,6 +45,7 @@ abstract public class MultiSelectableAdpater<T, VH extends RecyclerView.ViewHold
     }
 
 
+    // Selection
     public void setSelect (Set<Integer> selected) {
         HashSet<T> newSelected = new HashSet<>();
         for (int select : selected) {
@@ -68,6 +75,7 @@ abstract public class MultiSelectableAdpater<T, VH extends RecyclerView.ViewHold
         return selected.contains(data);
     }
 
+    // Disable
     public void setDisabled (Collection<T> disable) {
         disabled.addAll(disable);
     }
@@ -91,7 +99,5 @@ abstract public class MultiSelectableAdpater<T, VH extends RecyclerView.ViewHold
 
     }
 
-    public interface OnChangeSelectableListener {
-        void onChanageSelectable (boolean selectable);
-    }
+
 }
