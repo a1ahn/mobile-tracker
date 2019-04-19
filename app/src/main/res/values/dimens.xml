@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="headeritem_size">30dp</dimen>
+    <dimen name="footeritem_size">80dp</dimen>
+
+    <dimen name="blockitem_content_size">60dp</dimen>
+    <dimen name="blockitem_horizontal_gap_size">15dp</dimen>
+    <dimen name="blockitem_vertical_gap_size">5dp</dimen>
+
+    <dimen name="transactionitem_txhash_size">60dp</dimen>
+    <dimen name="transactionitem_title_size">30dp</dimen>
+    <dimen name="transactionitem_horizontal_gap_size">15dp</dimen>
+    <dimen name="transactionitem_vertical_gap_size">5dp</dimen>
+
+    <dimen name="resultactivity_title_size">15dp</dimen>
+    <dimen name="resultactivity_content_size">15dp</dimen>
+    <dimen name="resultactivity_horizontal_gap_size">15dp</dimen>
+    <dimen name="resultactivity_vertical_gap_size">5dp</dimen>
+
+    <dimen name="item_text_size">15sp</dimen>
+    <dimen name="item_text_size_small">12sp</dimen>
+
+</resources>

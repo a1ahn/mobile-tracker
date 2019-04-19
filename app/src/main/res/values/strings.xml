@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">simpleTracker</string>
+
+    <string name="item_header">Number of data</string>
+    <string name="item_footer">Next Blocks</string>
+
+    <string name="title_from">from</string>
+    <string name="title_to">to</string>
+</resources>
